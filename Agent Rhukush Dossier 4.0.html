@@ -219,11 +219,20 @@
             </p>
 
             <!-- Terminal Decrypt Log -->
-            <div id="terminal-log" class="bg-black/60 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-emerald-400/90 space-y-1.5 mb-8 h-32 overflow-y-auto">
+            <div id="terminal-log" class="bg-black/60 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-emerald-400/90 space-y-1.5 mb-4 h-32 overflow-y-auto">
                 <div>> Establishing secure connection to BSIT Lecture Room... [OK]</div>
                 <div>> Bypassing firewall: "Just_A_Normal_Lecture.pptx"... [SUCCESS]</div>
                 <div>> Loading 10 Classified Chapters (40 Surveillance Feeds // 5:40+ Runtime)... [READY]</div>
                 <div class="text-purple-400 animate-pulse">> Awaiting manual decryption trigger...</div>
+            </div>
+
+            <!-- Live IndexedDB Vault Status Strip on Lock Screen -->
+            <div class="flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-slate-800 font-mono text-[11px] text-slate-400 mb-6">
+                <span class="flex items-center gap-2 text-emerald-400">
+                    <i data-lucide="database" class="w-3.5 h-3.5"></i>
+                    <span id="boot-vault-status">VAULT: INITIALIZING LOCAL STORAGE...</span>
+                </span>
+                <span class="text-slate-500 hidden sm:inline">AUTO-SAVED IN BROWSER</span>
             </div>
 
             <!-- Action Controls -->
@@ -463,15 +472,23 @@
             <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
                 <!-- Batch Multi-File Upload Box -->
                 <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-purple-500/10 to-rose-500/10 border border-emerald-500/40 space-y-3">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <span class="font-mono text-xs font-bold text-emerald-300 flex items-center gap-2">
                             <i data-lucide="layers" class="w-4 h-4"></i>
-                            <span>QUICK BATCH UPLOAD (AUTO-FILL SLOTS)</span>
+                            <span>QUICK BATCH UPLOAD (AUTO-SAVED TO VAULT)</span>
                         </span>
                         <span id="editor-loaded-count" class="font-mono text-[11px] text-purple-300">0 / 40 LOADED</span>
                     </div>
+                    <!-- Live IndexedDB Storage Meter -->
+                    <div class="px-3 py-2 rounded-xl bg-slate-950/80 border border-emerald-500/25 flex items-center justify-between font-mono text-[11px]">
+                        <span id="editor-vault-status" class="text-emerald-400 flex items-center gap-1.5">
+                            <i data-lucide="hard-drive" class="w-3.5 h-3.5"></i>
+                            <span>VAULT SYNCED: 0/40 FEEDS (0.0 MB)</span>
+                        </span>
+                        <span class="text-slate-400 text-[10px]">SURVIVES RELOADS</span>
+                    </div>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Select multiple photos and videos at once! They will automatically populate empty placeholders across all 10 chapters in order.
+                        Select multiple photos and videos at once! Every file is automatically stored in your browser's IndexedDB vault so accidental refreshes never erase your work.
                     </p>
                     <label class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm cursor-pointer transition-all shadow-lg">
                         <i data-lucide="folder-up" class="w-5 h-5"></i>
@@ -549,14 +566,15 @@
                 </div>
 
                 <!-- 10-Chapter Media Slots Header -->
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-2">
                     <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">03 // 10-Chapter Media Slots (40 Feeds)</h3>
                     <div class="flex items-center gap-2">
-                        <button type="button" onclick="window.copyConfigJson()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-purple-300 font-mono text-xs cursor-pointer">
-                            Copy Config JSON
+                        <button type="button" onclick="window.copyGithubConfig()" title="Copies DEFAULT_DOSSIER_CONFIG with ./media/ filenames for GitHub Pages" class="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 font-mono text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="github" class="w-3.5 h-3.5"></i>
+                            <span>COPY GITHUB CONFIG</span>
                         </button>
-                        <button type="button" onclick="window.resetToPlaceholders()" class="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 font-mono text-xs cursor-pointer">
-                            Reset All
+                        <button id="btn-reset-vault" type="button" onclick="window.handleResetVaultClick()" class="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 font-mono text-xs cursor-pointer">
+                            Clear Vault / Reset
                         </button>
                     </div>
                 </div>
@@ -569,7 +587,10 @@
 
             <!-- Drawer Footer -->
             <div class="p-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-3">
-                <span class="font-mono text-[11px] text-slate-400">Changes update live immediately</span>
+                <span class="font-mono text-[11px] text-emerald-400/90 flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                    <span>Auto-saved to IndexedDB Vault</span>
+                </span>
                 <button type="button" onclick="window.toggleEditorDrawer(false)" class="px-6 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm cursor-pointer">
                     DONE & RETURN TO STAGE
                 </button>
@@ -767,6 +788,193 @@
             let startTransitionTimeout = null;
             let itemElapsedMs = 0;
             let currentHoldTargetMs = config.itemDurationMs;
+            let isDrawerOpen = false;
+            let hasUnsavedOrVaultData = false;
+            let resetConfirmPending = false;
+            let resetConfirmTimer = null;
+
+            // ===================================================================
+            // INDEXEDDB PERSISTENT VAULT ENGINE ('BSIT_Classified_Vault_v1')
+            // ===================================================================
+            class DossierVaultDB {
+                constructor() {
+                    this.dbName = 'BSIT_Classified_Vault_v1';
+                    this.dbVersion = 1;
+                    this.db = null;
+                }
+
+                async open() {
+                    if (this.db) return this.db;
+                    return new Promise((resolve, reject) => {
+                        if (!window.indexedDB) {
+                            reject(new Error('IndexedDB unavailable'));
+                            return;
+                        }
+                        const req = window.indexedDB.open(this.dbName, this.dbVersion);
+                        req.onupgradeneeded = (e) => {
+                            const db = e.target.result;
+                            if (!db.objectStoreNames.contains('state')) {
+                                db.createObjectStore('state', { keyPath: 'id' });
+                            }
+                            if (!db.objectStoreNames.contains('mediaBlobs')) {
+                                db.createObjectStore('mediaBlobs', { keyPath: 'key' });
+                            }
+                        };
+                        req.onsuccess = (e) => {
+                            this.db = e.target.result;
+                            resolve(this.db);
+                        };
+                        req.onerror = () => reject(req.error);
+                    });
+                }
+
+                async saveMediaBlob(key, fileOrBlob, fileName, mimeType) {
+                    try {
+                        const db = await this.open();
+                        return new Promise((resolve, reject) => {
+                            const tx = db.transaction('mediaBlobs', 'readwrite');
+                            const store = tx.objectStore('mediaBlobs');
+                            store.put({
+                                key,
+                                blob: fileOrBlob,
+                                fileName: fileName || 'media_file',
+                                mimeType: mimeType || fileOrBlob.type || '',
+                                size: fileOrBlob.size || 0,
+                                updatedAt: Date.now()
+                            });
+                            tx.oncomplete = () => {
+                                hasUnsavedOrVaultData = true;
+                                resolve();
+                            };
+                            tx.onerror = () => reject(tx.error);
+                        });
+                    } catch (e) {}
+                }
+
+                async deleteMediaBlob(key) {
+                    try {
+                        const db = await this.open();
+                        return new Promise((resolve) => {
+                            const tx = db.transaction('mediaBlobs', 'readwrite');
+                            tx.objectStore('mediaBlobs').delete(key);
+                            tx.oncomplete = () => resolve();
+                            tx.onerror = () => resolve();
+                        });
+                    } catch (e) {}
+                }
+
+                async saveConfigState(cfgObj, audioSettings) {
+                    try {
+                        const db = await this.open();
+                        // Clone config without ephemeral blob: URLs so clean metadata persists
+                        const cleanCfg = JSON.parse(JSON.stringify(cfgObj));
+                        cleanCfg.chapters.forEach(ch => {
+                            ch.items.forEach(item => {
+                                if (item.src && item.src.startsWith('blob:')) {
+                                    item.src = '';
+                                }
+                            });
+                        });
+                        if (cleanCfg.bgmSrc && cleanCfg.bgmSrc.startsWith('blob:')) {
+                            cleanCfg.bgmSrc = '';
+                        }
+
+                        return new Promise((resolve) => {
+                            const tx = db.transaction('state', 'readwrite');
+                            tx.objectStore('state').put({
+                                id: 'main_dossier',
+                                config: cleanCfg,
+                                audio: audioSettings || {},
+                                updatedAt: Date.now()
+                            });
+                            tx.oncomplete = () => {
+                                hasUnsavedOrVaultData = true;
+                                resolve();
+                            };
+                            tx.onerror = () => resolve();
+                        });
+                    } catch (e) {}
+                }
+
+                async loadAll() {
+                    try {
+                        const db = await this.open();
+                        const stateRecord = await new Promise((resolve) => {
+                            const tx = db.transaction('state', 'readonly');
+                            const req = tx.objectStore('state').get('main_dossier');
+                            req.onsuccess = () => resolve(req.result || null);
+                            req.onerror = () => resolve(null);
+                        });
+
+                        const blobRecords = await new Promise((resolve) => {
+                            const tx = db.transaction('mediaBlobs', 'readonly');
+                            const req = tx.objectStore('mediaBlobs').getAll();
+                            req.onsuccess = () => resolve(req.result || []);
+                            req.onerror = () => resolve([]);
+                        });
+
+                        return { stateRecord, blobRecords };
+                    } catch (e) {
+                        return { stateRecord: null, blobRecords: [] };
+                    }
+                }
+
+                async clearAll() {
+                    try {
+                        const db = await this.open();
+                        return new Promise((resolve) => {
+                            const tx = db.transaction(['state', 'mediaBlobs'], 'readwrite');
+                            tx.objectStore('state').clear();
+                            tx.objectStore('mediaBlobs').clear();
+                            tx.oncomplete = () => {
+                                hasUnsavedOrVaultData = false;
+                                resolve();
+                            };
+                            tx.onerror = () => resolve();
+                        });
+                    } catch (e) {}
+                }
+            }
+
+            const vaultDB = new DossierVaultDB();
+            let stateSaveDebounceTimer = null;
+
+            function scheduleVaultStateSave() {
+                clearTimeout(stateSaveDebounceTimer);
+                stateSaveDebounceTimer = setTimeout(async () => {
+                    await vaultDB.saveConfigState(config, {
+                        baseVolume: spyAudio.baseVolume,
+                        duckRatio: spyAudio.duckRatio,
+                        bgmTitle: spyAudio.trackName
+                    });
+                    await refreshVaultStatusBadges();
+                }, 250);
+            }
+
+            async function refreshVaultStatusBadges() {
+                const { blobRecords } = await vaultDB.loadAll();
+                const playlist = getFlattenedPlaylist();
+                const loadedFeeds = playlist.filter(p => p.item.src && p.item.src.trim() !== '').length;
+                const totalBytes = blobRecords.reduce((acc, r) => acc + (r.size || 0), 0);
+                const totalMB = (totalBytes / (1024 * 1024)).toFixed(1);
+
+                if (loadedFeeds > 0 || blobRecords.length > 0) {
+                    hasUnsavedOrVaultData = true;
+                }
+
+                const bootEl = document.getElementById('boot-vault-status');
+                if (bootEl) {
+                    bootEl.textContent = loadedFeeds > 0
+                        ? `VAULT RESTORED: ${loadedFeeds}/${playlist.length} FEEDS CACHED (${totalMB} MB)`
+                        : `VAULT READY: 0/${playlist.length} FEEDS (AUTO-SAVES UPLOADS)`;
+                }
+
+                const edEl = document.getElementById('editor-vault-status');
+                if (edEl) {
+                    edEl.innerHTML = `<i data-lucide="hard-drive" class="w-3.5 h-3.5"></i><span>VAULT SYNCED: ${loadedFeeds}/${playlist.length} FEEDS SAVED IN BROWSER (${totalMB} MB)</span>`;
+                    if (window.lucide) window.lucide.createIcons();
+                }
+            }
 
             // ===================================================================
             // HELPER FUNCTIONS FOR PLAYLIST & RUNTIME CALCULATION
@@ -946,12 +1154,14 @@
                         this.isMuted = false;
                     }
                     this.updateAudioHUD();
+                    scheduleVaultStateSave();
                 }
 
                 setDuckRatio(val) {
                     this.duckRatio = Math.max(0, Math.min(0.5, parseFloat(val)));
                     const edLabel = document.getElementById('editor-duck-label');
                     if (edLabel) edLabel.textContent = `${Math.round(this.duckRatio * 100)}%`;
+                    scheduleVaultStateSave();
                 }
 
                 setDucked(shouldDuck) {
@@ -1214,6 +1424,7 @@
                 }
 
                 updateRuntimeHUD();
+                scheduleVaultStateSave();
                 showToast(`Pace updated: ${(config.itemDurationMs / 1000).toFixed(1)}s per feed`);
             }
 
@@ -1793,10 +2004,13 @@
                 const drawer = document.getElementById('editor-drawer');
                 if (!drawer) return;
 
+                isDrawerOpen = !!open;
+
                 if (open) {
                     if (isPlaying) togglePlayPause();
                     if (isZoomOpen) closeCctvZoom(false);
                     buildEditorDrawer();
+                    refreshVaultStatusBadges();
                     drawer.classList.remove('hidden');
                 } else {
                     drawer.classList.add('hidden');
@@ -1872,6 +2086,7 @@
 
                 if (window.lucide) window.lucide.createIcons();
                 updateRuntimeHUD();
+                refreshVaultStatusBadges();
             }
 
             function triggerQuickUpload(chapterIdx, itemIdx) {
@@ -1882,7 +2097,7 @@
                 input.click();
             }
 
-            function handleSingleUpload(event, chapterIdx, itemIdx) {
+            async function handleSingleUpload(event, chapterIdx, itemIdx) {
                 const file = event.target.files[0];
                 if (!file) return;
 
@@ -1892,8 +2107,12 @@
                 const item = config.chapters[chapterIdx].items[itemIdx];
                 item.src = objectUrl;
                 item.type = isVideo ? 'video' : 'image';
+                item.fileName = file.name;
 
-                showToast(`Loaded ${file.name} into ${item.tag}`);
+                await vaultDB.saveMediaBlob(item.id, file, file.name, file.type);
+                scheduleVaultStateSave();
+
+                showToast(`Saved ${file.name} to IndexedDB Vault (${item.tag})`);
                 buildEditorDrawer();
 
                 const appEl = document.getElementById('presentation-app');
@@ -1905,7 +2124,7 @@
                 }
             }
 
-            function handleBatchUpload(event) {
+            async function handleBatchUpload(event) {
                 const files = Array.from(event.target.files || []);
                 if (!files.length) return;
 
@@ -1917,6 +2136,8 @@
                             const file = files[fileIdx++];
                             slot.src = URL.createObjectURL(file);
                             slot.type = file.type.startsWith('video/') ? 'video' : 'image';
+                            slot.fileName = file.name;
+                            await vaultDB.saveMediaBlob(slot.id, file, file.name, file.type);
                         }
                     }
                 }
@@ -1924,38 +2145,52 @@
                 while (fileIdx < files.length) {
                     const file = files[fileIdx++];
                     const targetCh = config.chapters[7];
-                    targetCh.items.push({
+                    const newSlot = {
                         id: `extra_${Date.now()}_${fileIdx}`,
                         label: `Extra Feed: ${file.name}`,
                         src: URL.createObjectURL(file),
                         type: file.type.startsWith('video/') ? 'video' : 'image',
+                        fileName: file.name,
                         aspect: '16:9 Wide',
                         tag: `BONUS_${fileIdx}`,
                         caption: file.name.replace(/\.[^/.]+$/, '')
-                    });
+                    };
+                    targetCh.items.push(newSlot);
+                    await vaultDB.saveMediaBlob(newSlot.id, file, file.name, file.type);
                 }
 
-                showToast(`Batch loaded ${files.length} files across your dossier!`);
+                scheduleVaultStateSave();
+                showToast(`Saved ${files.length} files to IndexedDB Vault!`);
                 buildEditorDrawer();
             }
 
-            function handleBgmUpload(event) {
+            async function handleBgmUpload(event) {
                 const file = event.target.files[0];
                 if (!file) return;
 
                 const audioUrl = URL.createObjectURL(file);
                 spyAudio.loadCustomTrack(audioUrl, file.name);
+                config.bgmFileName = file.name;
+                config.bgmTitle = file.name.replace(/\.[^/.]+$/, '').toUpperCase();
+
+                await vaultDB.saveMediaBlob('custom_bgm', file, file.name, file.type);
+                scheduleVaultStateSave();
 
                 const badge = document.getElementById('editor-bgm-badge');
                 const resetBtn = document.getElementById('btn-reset-bgm');
                 if (badge) badge.textContent = `CUSTOM: ${file.name}`;
                 if (resetBtn) resetBtn.classList.remove('hidden');
 
-                showToast(`Soundtrack loaded: ${file.name}`);
+                showToast(`Soundtrack saved to Vault: ${file.name}`);
             }
 
-            function resetBgmToSynth() {
+            async function resetBgmToSynth() {
                 spyAudio.clearCustomTrack();
+                config.bgmFileName = '';
+                config.bgmTitle = 'SPY SYNTH GROOVE';
+                await vaultDB.deleteMediaBlob('custom_bgm');
+                scheduleVaultStateSave();
+
                 const badge = document.getElementById('editor-bgm-badge');
                 const resetBtn = document.getElementById('btn-reset-bgm');
                 if (badge) badge.textContent = 'BUILT-IN SPY SYNTH';
@@ -1975,52 +2210,125 @@
                     tag: `EXTRA_0${num}`,
                     caption: "Another iconic BSIT moment caught on surveillance"
                 });
+                scheduleVaultStateSave();
                 buildEditorDrawer();
                 showToast(`Added extra feed slot to ${ch.shortTitle}`);
             }
 
-            function removeMediaSlot(chapterIdx, itemIdx) {
-                config.chapters[chapterIdx].items.splice(itemIdx, 1);
+            async function removeMediaSlot(chapterIdx, itemIdx) {
+                const removed = config.chapters[chapterIdx].items.splice(itemIdx, 1)[0];
+                if (removed && removed.id) {
+                    await vaultDB.deleteMediaBlob(removed.id);
+                }
+                scheduleVaultStateSave();
                 buildEditorDrawer();
-                showToast('Slot removed');
+                showToast('Slot removed from Vault');
             }
 
-            function clearMediaSlot(chapterIdx, itemIdx) {
-                config.chapters[chapterIdx].items[itemIdx].src = '';
+            async function clearMediaSlot(chapterIdx, itemIdx) {
+                const slot = config.chapters[chapterIdx].items[itemIdx];
+                slot.src = '';
+                slot.fileName = '';
+                if (slot.id) {
+                    await vaultDB.deleteMediaBlob(slot.id);
+                }
+                scheduleVaultStateSave();
                 buildEditorDrawer();
-                showToast('Slot cleared');
+                showToast('Slot cleared from Vault');
             }
 
             function updateMediaMeta(chapterIdx, itemIdx, field, value) {
                 config.chapters[chapterIdx].items[itemIdx][field] = value;
+                hasUnsavedOrVaultData = true;
+                scheduleVaultStateSave();
             }
 
             function updateConfigText(field, value) {
                 config[field] = value;
+                hasUnsavedOrVaultData = true;
                 syncIdentityLabels();
+                scheduleVaultStateSave();
             }
 
-            function copyConfigJson() {
-                const exportData = JSON.stringify(config, null, 2);
+            function copyGithubConfig() {
+                const githubConfig = JSON.parse(JSON.stringify(config));
+                githubConfig.bgmSrc = githubConfig.bgmFileName ? `./media/${githubConfig.bgmFileName}` : '';
+                delete githubConfig.bgmFileName;
+
+                githubConfig.chapters.forEach(ch => {
+                    ch.items.forEach(item => {
+                        if (item.fileName) {
+                            item.src = `./media/${item.fileName}`;
+                        } else if (item.src && item.src.startsWith('blob:')) {
+                            item.src = `./media/${item.id}.${item.type === 'video' ? 'mp4' : 'jpg'}`;
+                        }
+                        delete item.fileName;
+                    });
+                });
+
+                const snippet = `const DEFAULT_DOSSIER_CONFIG = ${JSON.stringify(githubConfig, null, 4)};`;
                 const temp = document.createElement('textarea');
-                temp.value = exportData;
+                temp.value = snippet;
                 document.body.appendChild(temp);
                 temp.select();
                 document.execCommand('copy');
                 document.body.removeChild(temp);
-                showToast('Dossier JSON configuration copied to clipboard!');
+                showToast('Copied DEFAULT_DOSSIER_CONFIG with ./media/ paths for GitHub!');
             }
 
-            function resetToPlaceholders() {
+            function handleResetVaultClick() {
+                const btn = document.getElementById('btn-reset-vault');
+                if (!resetConfirmPending) {
+                    resetConfirmPending = true;
+                    if (btn) {
+                        btn.textContent = 'Click Again to Confirm Wipe';
+                        btn.classList.add('bg-rose-600', 'text-white', 'font-bold');
+                    }
+                    showToast('Click "Confirm Wipe" within 4s to erase all saved Vault media');
+                    clearTimeout(resetConfirmTimer);
+                    resetConfirmTimer = setTimeout(() => {
+                        resetConfirmPending = false;
+                        if (btn) {
+                            btn.textContent = 'Clear Vault / Reset';
+                            btn.classList.remove('bg-rose-600', 'text-white', 'font-bold');
+                        }
+                    }, 4000);
+                    return;
+                }
+
+                clearTimeout(resetConfirmTimer);
+                resetConfirmPending = false;
+                if (btn) {
+                    btn.textContent = 'Clear Vault / Reset';
+                    btn.classList.remove('bg-rose-600', 'text-white', 'font-bold');
+                }
+                resetToPlaceholders();
+            }
+
+            async function resetToPlaceholders() {
+                await vaultDB.clearAll();
+                spyAudio.clearCustomTrack();
                 config = JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG));
+                hasUnsavedOrVaultData = false;
                 syncIdentityLabels();
                 buildEditorDrawer();
-                showToast('All 40 slots reset to default placeholders');
+                await refreshVaultStatusBadges();
+                showToast('IndexedDB Vault wiped & all 40 slots reset to default');
             }
 
             // ===================================================================
-            // UTILITIES: FULLSCREEN, KEYBOARD & TOASTS
+            // UTILITIES: FULLSCREEN, RELOAD GUARD, KEYBOARD & TOASTS
             // ===================================================================
+            function setupBeforeUnloadGuard() {
+                window.addEventListener('beforeunload', (e) => {
+                    if (isDrawerOpen || hasUnsavedOrVaultData) {
+                        e.preventDefault();
+                        e.returnValue = '';
+                        return '';
+                    }
+                });
+            }
+
             function toggleFullscreen() {
                 if (!document.fullscreenElement) {
                     document.documentElement.requestFullscreen().catch(() => {});
@@ -2098,19 +2406,80 @@
             window.clearMediaSlot = clearMediaSlot;
             window.updateMediaMeta = updateMediaMeta;
             window.updateConfigText = updateConfigText;
-            window.copyConfigJson = copyConfigJson;
+            window.copyGithubConfig = copyGithubConfig;
+            window.handleResetVaultClick = handleResetVaultClick;
             window.resetToPlaceholders = resetToPlaceholders;
             window.toggleFullscreen = toggleFullscreen;
 
-            // Initialize on DOM ready
-            function initApp() {
+            // Hydrate IndexedDB Vault and Initialize on DOM Ready
+            async function initApp() {
                 if (window.lucide) window.lucide.createIcons();
+
+                try {
+                    const { stateRecord, blobRecords } = await vaultDB.loadAll();
+                    if (stateRecord && stateRecord.config) {
+                        config = stateRecord.config;
+                    }
+
+                    const blobMap = new Map();
+                    blobRecords.forEach(rec => blobMap.set(rec.key, rec));
+
+                    if (blobMap.size > 0 || (stateRecord && stateRecord.config)) {
+                        hasUnsavedOrVaultData = true;
+                    }
+
+                    // Rehydrate all 40 media slots from IndexedDB blobs
+                    config.chapters.forEach(ch => {
+                        ch.items.forEach(item => {
+                            const rec = blobMap.get(item.id);
+                            if (rec && rec.blob) {
+                                item.src = URL.createObjectURL(rec.blob);
+                                item.type = (rec.mimeType || rec.blob.type || '').startsWith('video/') ? 'video' : 'image';
+                                item.fileName = rec.fileName || item.fileName || '';
+                            }
+                        });
+                    });
+
+                    // Rehydrate audio settings & custom BGM track
+                    if (stateRecord && stateRecord.audio) {
+                        if (typeof stateRecord.audio.baseVolume === 'number') {
+                            spyAudio.baseVolume = stateRecord.audio.baseVolume;
+                            const pct = Math.round(spyAudio.baseVolume * 100);
+                            const hudSlider = document.getElementById('hud-bgm-volume');
+                            const edSlider = document.getElementById('editor-bgm-volume');
+                            const edLabel = document.getElementById('editor-vol-label');
+                            if (hudSlider) hudSlider.value = pct;
+                            if (edSlider) edSlider.value = pct;
+                            if (edLabel) edLabel.textContent = `${pct}%`;
+                        }
+                        if (typeof stateRecord.audio.duckRatio === 'number') {
+                            spyAudio.duckRatio = stateRecord.audio.duckRatio;
+                            const edDuck = document.getElementById('editor-duck-ratio');
+                            const edDuckLabel = document.getElementById('editor-duck-label');
+                            if (edDuck) edDuck.value = Math.round(spyAudio.duckRatio * 100);
+                            if (edDuckLabel) edDuckLabel.textContent = `${Math.round(spyAudio.duckRatio * 100)}%`;
+                        }
+                    }
+
+                    const customBgmRec = blobMap.get('custom_bgm');
+                    if (customBgmRec && customBgmRec.blob) {
+                        const bgmUrl = URL.createObjectURL(customBgmRec.blob);
+                        spyAudio.loadCustomTrack(bgmUrl, customBgmRec.fileName || 'CUSTOM BGM');
+                        config.bgmFileName = customBgmRec.fileName || '';
+                        const badge = document.getElementById('editor-bgm-badge');
+                        const resetBtn = document.getElementById('btn-reset-bgm');
+                        if (badge) badge.textContent = `CUSTOM: ${customBgmRec.fileName}`;
+                        if (resetBtn) resetBtn.classList.remove('hidden');
+                    } else if (config.bgmSrc && config.bgmSrc.trim() !== '') {
+                        spyAudio.loadCustomTrack(config.bgmSrc, config.bgmTitle || 'CUSTOM BGM');
+                    }
+                } catch (e) {}
+
                 syncIdentityLabels();
-                if (config.bgmSrc && config.bgmSrc.trim() !== '') {
-                    spyAudio.loadCustomTrack(config.bgmSrc, config.bgmTitle || 'CUSTOM BGM');
-                }
                 buildEditorDrawer();
+                await refreshVaultStatusBadges();
                 setupKeyboardShortcuts();
+                setupBeforeUnloadGuard();
                 updateRuntimeHUD();
             }
 
