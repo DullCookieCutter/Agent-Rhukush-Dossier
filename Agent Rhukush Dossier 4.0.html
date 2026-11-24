@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP SECRET // AGENT MODERATOR DOSSIER</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk (Display), Inter (Body), JetBrains Mono (Spy Terminal) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Canvas Confetti for Finale -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        spy: {
+                            bg: '#05080f',
+                            card: '#0c1322',
+                            border: '#1e293b',
+                            emerald: '#00ff88',
+                            cyan: '#06b6d4',
+                            lavender: '#c084fc',
+                            coral: '#ff4d6d',
+                            amber: '#f59e0b'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        /* Custom Spy CRT & Editorial Styling */
+        body {
+            background-color: #05080f;
+            color: #f8fafc;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .bg-spy-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+        }
+
+        .crt-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Viewfinder Corners */
+        .viewfinder {
+            position: relative;
+        }
+        .viewfinder::before, .viewfinder::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: #00ff88;
+            border-style: solid;
+            pointer-events: none;
+            z-index: 20;
+            transition: all 0.3s ease;
+        }
+        .viewfinder::before {
+            top: 8px;
+            left: 8px;
+            border-width: 2px 0 0 2px;
+        }
+        .viewfinder::after {
+            bottom: 8px;
+            right: 8px;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* Stamp Badge */
+        .classified-stamp {
+            border: 3px solid currentColor;
+            padding: 0.25rem 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transform: rotate(-4deg);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        /* Smooth Slide Transitions */
+        .slide-enter {
+            animation: slideFadeIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.97) translateY(12px);
+                filter: blur(4px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* CCTV Target Reticle Lock-On */
+        .cctv-locked {
+            border-color: #00ff88 !important;
+            box-shadow: 0 0 0 2px #00ff88, 0 0 30px rgba(0, 255, 136, 0.55) !important;
+            transform: scale(1.02);
+            z-index: 25;
+        }
+        .cctv-locked::before, .cctv-locked::after {
+            width: 28px;
+            height: 28px;
+            border-color: #34d399;
+        }
+
+        /* Ken Burns Surveillance Pan/Zoom inside CCTV Close-up */
+        @keyframes kenBurnsSpy {
+            0% {
+                transform: scale(1) translate(0%, 0%);
+            }
+            50% {
+                transform: scale(1.08) translate(-1.5%, -1%);
+            }
+            100% {
+                transform: scale(1.12) translate(1%, 0.8%);
+            }
+        }
+        .animate-ken-burns {
+            animation: kenBurnsSpy 10s ease-in-out infinite alternate;
+        }
+
+        /* Audio Equalizer Bars */
+        @keyframes eqBounce {
+            0%, 100% { height: 25%; }
+            50% { height: 100%; }
+        }
+        .eq-bar {
+            animation: eqBounce 0.7s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #05080f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff88;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-spy-bg bg-spy-grid min-h-screen flex flex-col justify-between relative selection:bg-emerald-400 selection:text-black">
+
+    <!-- Subtle CRT Scanline Overlay -->
+    <div class="crt-overlay fixed inset-0 z-50 pointer-events-none opacity-60"></div>
+
+    <!-- =====================================================================
+         1. TOP-SECRET BOOT / ACCESS SCREEN
+    ====================================================================== -->
+    <div id="boot-screen" class="fixed inset-0 z-40 bg-spy-bg bg-spy-grid flex flex-col items-center justify-center p-4 sm:p-8 transition-all duration-700">
+        <!-- Top Security Header -->
+        <div class="w-full max-w-3xl flex items-center justify-between text-xs font-mono text-emerald-400/90 border-b border-emerald-500/20 pb-3 mb-8">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                <span>INTERCEPTED TRANSMISSION // BSIT-HQ</span>
+            </div>
+            <span id="boot-clock">CLEARANCE: LEVEL 99</span>
+        </div>
+
+        <!-- Main Dossier Lock Card -->
+        <div class="w-full max-w-2xl bg-spy-card/90 backdrop-blur-xl border border-emerald-500/30 rounded-3xl p-6 sm:p-10 shadow-[0_0_50px_rgba(0,255,136,0.12)] relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none">
+                <i data-lucide="shield-alert" class="w-24 h-24 text-emerald-400"></i>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs mb-4">
+                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                <span>ENCRYPTED SURPRISE PROTOCOL</span>
+            </div>
+
+            <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-2">
+                FILE: <span id="boot-agent-name" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-purple-400 to-rose-400">AGENT MODERATOR</span>
+            </h1>
+            <p class="font-mono text-xs sm:text-sm text-slate-400 mb-6">
+                SUBJECT: BSIT Club Advisor // Status: <span class="text-purple-400">Iconic, Gen-Z Coded & Unmatched</span>
+            </p>
+
+            <!-- Terminal Decrypt Log -->
+            <div id="terminal-log" class="bg-black/60 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-emerald-400/90 space-y-1.5 mb-8 h-32 overflow-y-auto">
+                <div>> Establishing secure connection to BSIT Lecture Room... [OK]</div>
+                <div>> Bypassing firewall: "Just_A_Normal_Lecture.pptx"... [SUCCESS]</div>
+                <div>> Loading 10 Classified Chapters (40 Surveillance Feeds // 5:40+ Runtime)... [READY]</div>
+                <div class="text-purple-400 animate-pulse">> Awaiting manual decryption trigger...</div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <button id="btn-decrypt" type="button" onclick="window.startDecryption()" class="w-full sm:flex-1 group relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-400 to-cyan-400 p-4 text-slate-950 font-display font-extrabold text-base sm:text-lg tracking-wide shadow-[0_0_25px_rgba(0,255,136,0.4)] hover:shadow-[0_0_40px_rgba(6,182,212,0.6)] transition-all active:scale-95 flex items-center justify-center gap-3 cursor-pointer">
+                    <i data-lucide="fingerprint" class="w-6 h-6 transition-transform group-hover:scale-110"></i>
+                    <span>DECRYPT & LAUNCH SURPRISE</span>
+                </button>
+
+                <button id="btn-boot-edit" type="button" onclick="window.toggleEditorDrawer(true)" title="Customize Photos, Videos & Captions" class="w-full sm:w-auto px-5 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-emerald-400 font-mono text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
+                    <i data-lucide="sliders" class="w-4 h-4"></i>
+                    <span>EDIT INTEL</span>
+                </button>
+            </div>
+        </div>
+
+        <p class="mt-6 font-mono text-[11px] text-slate-500 text-center">
+            TIP: <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">F</kbd> Fullscreen • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">SPACE</kbd> Play/Pause • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">←/→</kbd> Next/Prev Feed • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">M</kbd> Mute BGM • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">ESC</kbd> Exit Zoom
+        </p>
+    </div>
+
+    <!-- =====================================================================
+         2. MAIN PRESENTATION STAGE
+    ====================================================================== -->
+    <div id="presentation-app" class="hidden flex-col min-h-screen justify-between relative z-10">
+        
+        <!-- Top Spy HUD Bar -->
+        <header class="w-full px-3 sm:px-6 py-2.5 bg-spy-bg/90 backdrop-blur-md border-b border-slate-800/80 flex items-center justify-between gap-2 z-30">
+            <div class="flex items-center gap-2.5 shrink-0">
+                <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 font-mono text-xs font-bold">
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                    <span>REC</span>
+                </div>
+                <div class="hidden xl:flex flex-col">
+                    <span class="font-mono text-[11px] text-emerald-400 font-bold leading-none" id="hud-agent-name">AGENT MODERATOR</span>
+                    <span class="font-mono text-[10px] text-slate-400 leading-tight" id="hud-runtime-display">RUNTIME: 00:00 / 05:40</span>
+                </div>
+            </div>
+
+            <!-- Chapter Stepper Pills (10 Chapters) -->
+            <div id="slide-indicators" class="flex items-center gap-1 overflow-x-auto max-w-[48vw] sm:max-w-[55vw] py-1 no-scrollbar">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- Right HUD Controls (Pace, Audio, Fullscreen, Secret Editor Gear) -->
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <select id="pace-selector" onchange="window.changePace(this.value)" title="Presentation Pace / Duration" class="hidden md:block px-2.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 font-mono text-[11px] text-purple-300 focus:outline-none focus:border-emerald-500 cursor-pointer">
+                    <option value="8500">PACE: 5.5 MIN (8.5s)</option>
+                    <option value="10500">PACE: 7.0 MIN (10.5s)</option>
+                    <option value="5000">PACE: FAST PREVIEW (5.0s)</option>
+                </select>
+
+                <!-- BGM / Audio Control Pill with Live Equalizer & Volume Slider -->
+                <div id="hud-bgm-pill" class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 transition-all">
+                    <button id="btn-audio" type="button" onclick="window.spyAudio.toggleMute()" title="Toggle Background Music (M)" class="p-1 rounded-lg hover:bg-slate-800 text-emerald-400 transition-all cursor-pointer flex items-center gap-1.5">
+                        <i id="icon-audio" data-lucide="volume-2" class="w-4 h-4"></i>
+                    </button>
+                    <!-- Live Equalizer Bars -->
+                    <div id="hud-eq-bars" class="hidden sm:flex items-end gap-0.5 h-3.5 w-3.5">
+                        <span class="w-0.5 bg-emerald-400 rounded-full eq-bar" style="animation-delay: 0.0s"></span>
+                        <span class="w-0.5 bg-purple-400 rounded-full eq-bar" style="animation-delay: 0.2s"></span>
+                        <span class="w-0.5 bg-emerald-400 rounded-full eq-bar" style="animation-delay: 0.4s"></span>
+                    </div>
+                    <div class="hidden lg:flex flex-col leading-none">
+                        <span id="hud-bgm-state" class="font-mono text-[9px] font-bold text-emerald-400 tracking-wider">PLAYING</span>
+                        <span id="hud-bgm-track" class="font-mono text-[8px] text-slate-400 truncate max-w-[85px]">SPY SYNTH</span>
+                    </div>
+                    <input id="hud-bgm-volume" type="range" min="0" max="100" value="75" oninput="window.spyAudio.setBaseVolume(this.value / 100)" title="Background Music Volume" class="hidden sm:block w-14 md:w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-400">
+                </div>
+
+                <button type="button" onclick="window.toggleFullscreen()" title="Fullscreen (F)" class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition-all cursor-pointer">
+                    <i data-lucide="maximize" class="w-4 h-4"></i>
+                </button>
+                <!-- Discrete Intel Editor Trigger -->
+                <button type="button" onclick="window.toggleEditorDrawer(true)" title="Open Agent Intel Media Editor & Batch Upload" class="px-2.5 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-purple-400 font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer">
+                    <i data-lucide="folder-plus" class="w-4 h-4 text-emerald-400"></i>
+                    <span class="hidden lg:inline">INTEL</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Progress Bar for Overall Presentation -->
+        <div class="w-full h-1.5 bg-slate-900 overflow-hidden flex">
+            <div id="autoplay-progress" class="h-full bg-gradient-to-r from-emerald-400 via-purple-400 to-rose-500 w-0 transition-all duration-100 ease-linear"></div>
+        </div>
+
+        <!-- Dynamic Slide Container -->
+        <main id="slide-stage" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-5 flex items-center justify-center">
+            <!-- Slide content injected dynamically -->
+        </main>
+
+        <!-- Bottom Playback Control Dock -->
+        <footer class="w-full px-4 sm:px-8 py-2.5 bg-spy-bg/90 backdrop-blur-md border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 z-30">
+            <div class="hidden sm:flex items-center gap-2.5 font-mono text-xs text-slate-400">
+                <span class="text-emerald-400 font-bold" id="footer-chapter-tag">CH 01/10</span>
+                <span>•</span>
+                <span id="footer-item-status" class="text-purple-300">STANDBY</span>
+            </div>
+
+            <!-- Center Playback Controls -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5 mx-auto sm:mx-0">
+                <button type="button" onclick="window.prevChapter()" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-all active:scale-95 cursor-pointer" title="Previous Chapter (Up Arrow)">
+                    <i data-lucide="chevrons-left" class="w-4 h-4"></i>
+                </button>
+
+                <button type="button" onclick="window.prevMediaItem()" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 transition-all active:scale-95 cursor-pointer" title="Previous Media Feed (Left Arrow)">
+                    <i data-lucide="skip-back" class="w-4 h-4"></i>
+                </button>
+
+                <button id="btn-play-pause" type="button" onclick="window.togglePlayPause()" class="px-5 py-2.5 rounded-2xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-xs sm:text-sm flex items-center gap-2 shadow-[0_0_20px_rgba(0,255,136,0.35)] transition-all active:scale-95 cursor-pointer">
+                    <i id="icon-play-pause" data-lucide="pause" class="w-4 h-4"></i>
+                    <span id="label-play-pause">CCTV AUTO-TOUR ON</span>
+                </button>
+
+                <button type="button" onclick="window.nextMediaItem()" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 transition-all active:scale-95 cursor-pointer" title="Next Media Feed (Right Arrow)">
+                    <i data-lucide="skip-forward" class="w-4 h-4"></i>
+                </button>
+
+                <button type="button" onclick="window.nextChapter()" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 transition-all active:scale-95 cursor-pointer" title="Next Chapter (Down Arrow)">
+                    <i data-lucide="chevrons-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="hidden md:flex items-center gap-3 font-mono text-xs text-slate-400">
+                <span id="footer-time-remaining" class="text-emerald-400">REM: 05:40</span>
+                <span>|</span>
+                <span>FEED <strong id="slide-counter" class="text-white">01 / 40</strong></span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- =====================================================================
+         3. CCTV SPY CLOSE-UP ZOOM MODAL OVERLAY (FLIP ORIGIN EXPANSION)
+    ====================================================================== -->
+    <div id="cctv-zoom-overlay" class="fixed inset-0 z-40 hidden items-center justify-center p-3 sm:p-8">
+        <!-- Darkened Spy Backdrop -->
+        <div id="cctv-zoom-backdrop" onclick="window.closeCctvZoom(true)" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md opacity-0 transition-opacity duration-500 cursor-pointer"></div>
+
+        <!-- Animated FLIP Zoom Container -->
+        <div id="cctv-zoom-card" class="relative w-full max-w-5xl h-[78vh] sm:h-[82vh] bg-spy-card border-2 border-emerald-400/80 rounded-3xl shadow-[0_0_80px_rgba(0,255,136,0.35)] overflow-hidden flex flex-col justify-between z-10 will-change-transform">
+            <!-- Top CCTV Telemetry Bar -->
+            <div class="relative z-20 px-4 sm:px-6 py-3 bg-gradient-to-b from-black/90 via-black/60 to-transparent flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 flex-wrap">
+                    <span class="px-2.5 py-1 rounded-md bg-rose-600/25 border border-rose-500/60 text-rose-400 font-mono text-[11px] font-bold flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                        <span>LIVE INTERCEPT</span>
+                    </span>
+                    <span id="zoom-tag" class="font-mono text-xs text-emerald-400 font-bold tracking-wider">CAM // 01</span>
+                    <span id="zoom-chapter-badge" class="hidden sm:inline-block px-2 py-0.5 rounded bg-purple-500/15 border border-purple-500/30 font-mono text-[10px] text-purple-300">CH 01</span>
+                    <!-- Auto-Ducking Active Badge (Shown when video plays) -->
+                    <span id="zoom-ducking-badge" class="hidden items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/50 text-amber-300 font-mono text-[10px] font-bold">
+                        <i data-lucide="mic" class="w-3 h-3"></i>
+                        <span>BGM DUCKED // COMMS AUDIO PRIORITY</span>
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <span id="zoom-telemetry" class="hidden md:inline font-mono text-[11px] text-emerald-300/80 mr-2">ZOOM: 400% // SIGNAL LOCKED</span>
+                    <button type="button" onclick="window.prevMediaItem()" title="Previous Feed (Left Arrow)" class="p-2 rounded-xl bg-black/70 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-emerald-400 transition-all cursor-pointer">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </button>
+                    <button type="button" onclick="window.nextMediaItem()" title="Next Feed (Right Arrow)" class="p-2 rounded-xl bg-black/70 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-emerald-400 transition-all cursor-pointer">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                    <button type="button" onclick="window.closeCctvZoom(true)" title="Close Zoom (Esc)" class="p-2 rounded-xl bg-black/70 hover:bg-rose-500/30 border border-slate-700 hover:border-rose-400 text-slate-200 hover:text-white transition-all cursor-pointer">
+                        <i data-lucide="minimize-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Corner Spy Crosshairs -->
+            <div class="pointer-events-none absolute inset-4 border border-emerald-500/20 rounded-2xl z-20">
+                <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-emerald-400"></div>
+                <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-emerald-400"></div>
+                <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-emerald-400"></div>
+                <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-emerald-400"></div>
+            </div>
+
+            <!-- Center Zoomed Media Viewport -->
+            <div id="cctv-zoom-media" class="absolute inset-0 flex items-center justify-center bg-black overflow-hidden">
+                <!-- Populated dynamically -->
+            </div>
+
+            <!-- Bottom Spy Caption & Item Progress -->
+            <div class="relative z-20 px-5 sm:px-8 py-4 sm:py-5 bg-gradient-to-t from-black/95 via-black/80 to-transparent space-y-2.5">
+                <div class="flex items-end justify-between gap-4">
+                    <div>
+                        <div class="font-mono text-[11px] text-purple-400 uppercase tracking-widest mb-1" id="zoom-subtitle">
+                            SURVEILLANCE FEED // BSIT ARCHIVE
+                        </div>
+                        <p id="zoom-caption" class="font-display text-lg sm:text-2xl font-bold text-white leading-snug">
+                            Caption goes here
+                        </p>
+                    </div>
+
+                    <!-- Mini Audio Visualizer -->
+                    <div class="hidden sm:flex items-end gap-1 h-6 px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                        <span class="w-1 bg-emerald-400 rounded-full eq-bar" style="animation-delay: 0.0s"></span>
+                        <span class="w-1 bg-purple-400 rounded-full eq-bar" style="animation-delay: 0.2s"></span>
+                        <span class="w-1 bg-emerald-400 rounded-full eq-bar" style="animation-delay: 0.4s"></span>
+                        <span class="w-1 bg-rose-400 rounded-full eq-bar" style="animation-delay: 0.1s"></span>
+                    </div>
+                </div>
+
+                <!-- Individual Feed Hold Progress Bar -->
+                <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                    <div id="zoom-item-progress" class="h-full bg-emerald-400 w-0 transition-all duration-100 ease-linear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         4. LIVE MEDIA CUSTOMIZATION DRAWER ('AGENT INTEL EDITOR')
+    ====================================================================== -->
+    <div id="editor-drawer" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div onclick="window.toggleEditorDrawer(false)" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        
+        <!-- Drawer Panel -->
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-2xl bg-spy-card border-l border-emerald-500/30 shadow-2xl flex flex-col overflow-hidden">
+            <!-- Drawer Header -->
+            <div class="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+                <div>
+                    <div class="flex items-center gap-2 text-emerald-400 font-mono text-xs mb-1">
+                        <i data-lucide="folder-edit" class="w-4 h-4"></i>
+                        <span>AGENT INTEL CUSTOMIZER</span>
+                    </div>
+                    <h2 class="font-display text-xl font-bold text-white">Customize Photos, Videos & Soundtrack</h2>
+                </div>
+                <button type="button" onclick="window.toggleEditorDrawer(false)" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Drawer Body -->
+            <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
+                <!-- Batch Multi-File Upload Box -->
+                <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-purple-500/10 to-rose-500/10 border border-emerald-500/40 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-mono text-xs font-bold text-emerald-300 flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4"></i>
+                            <span>QUICK BATCH UPLOAD (AUTO-FILL SLOTS)</span>
+                        </span>
+                        <span id="editor-loaded-count" class="font-mono text-[11px] text-purple-300">0 / 40 LOADED</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Select multiple photos and videos at once! They will automatically populate empty placeholders across all 10 chapters in order.
+                    </p>
+                    <label class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm cursor-pointer transition-all shadow-lg">
+                        <i data-lucide="folder-up" class="w-5 h-5"></i>
+                        <span>SELECT MULTIPLE PHOTOS & VIDEOS</span>
+                        <input type="file" accept="image/*,video/*" multiple class="hidden" onchange="window.handleBatchUpload(event)">
+                    </label>
+                </div>
+
+                <!-- General Agent Details -->
+                <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 space-y-4">
+                    <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">01 // Subject Identity & Timing</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-mono text-slate-400 mb-1">Agent / Moderator Name</label>
+                            <input id="input-agent-name" type="text" oninput="window.updateConfigText('agentName', this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-emerald-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-slate-400 mb-1">Codename / Alias</label>
+                            <input id="input-codename" type="text" oninput="window.updateConfigText('codename', this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-emerald-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between font-mono text-[11px] text-slate-400 mb-1">
+                            <span>CCTV Zoom Hold Duration (Per Feed)</span>
+                            <span id="editor-duration-label" class="text-emerald-400">8.5s (~5:40 Total)</span>
+                        </div>
+                        <input id="editor-duration-slider" type="range" min="4000" max="15000" step="500" value="8500" oninput="window.changePace(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1">Finale Tribute Message (Chapter 10)</label>
+                        <textarea id="input-finale-msg" rows="2" oninput="window.updateConfigText('finaleMessage', this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-emerald-500 focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- Background Music Soundtrack Settings -->
+                <div class="bg-slate-950/60 border border-purple-500/30 rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center gap-2">
+                            <i data-lucide="music" class="w-4 h-4"></i>
+                            <span>02 // Background Soundtrack & Auto-Ducking</span>
+                        </h3>
+                        <span id="editor-bgm-badge" class="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 font-mono text-[10px] text-emerald-300">
+                            BUILT-IN SPY SYNTH
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Upload an MP3/WAV/OGG song (or use the built-in Spy Groove synth). Music automatically lowers to 15% volume whenever a video clip plays so his voice is crystal clear!
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+                        <label class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 font-mono text-xs font-bold cursor-pointer transition-all">
+                            <i data-lucide="file-audio" class="w-4 h-4"></i>
+                            <span>UPLOAD CUSTOM BGM (MP3/WAV)</span>
+                            <input type="file" accept="audio/*" class="hidden" onchange="window.handleBgmUpload(event)">
+                        </label>
+                        <button id="btn-reset-bgm" type="button" onclick="window.resetBgmToSynth()" class="hidden px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-rose-950/40 border border-slate-700 hover:border-rose-500/40 text-slate-300 hover:text-rose-300 font-mono text-xs cursor-pointer transition-all">
+                            Use Built-In Synth
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <div class="flex justify-between font-mono text-[11px] text-slate-400 mb-1">
+                                <span>Normal BGM Volume</span>
+                                <span id="editor-vol-label" class="text-emerald-400">75%</span>
+                            </div>
+                            <input id="editor-bgm-volume" type="range" min="0" max="100" value="75" oninput="window.spyAudio.setBaseVolume(this.value / 100)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400">
+                        </div>
+                        <div>
+                            <div class="flex justify-between font-mono text-[11px] text-slate-400 mb-1">
+                                <span>Video Ducking Level</span>
+                                <span id="editor-duck-label" class="text-amber-400">15%</span>
+                            </div>
+                            <input id="editor-duck-ratio" type="range" min="0" max="40" value="15" oninput="window.spyAudio.setDuckRatio(this.value / 100)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10-Chapter Media Slots Header -->
+                <div class="flex items-center justify-between">
+                    <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">03 // 10-Chapter Media Slots (40 Feeds)</h3>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="window.copyConfigJson()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-purple-300 font-mono text-xs cursor-pointer">
+                            Copy Config JSON
+                        </button>
+                        <button type="button" onclick="window.resetToPlaceholders()" class="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 font-mono text-xs cursor-pointer">
+                            Reset All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Chapter & Slot List -->
+                <div id="media-slots-editor" class="space-y-4">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- Drawer Footer -->
+            <div class="p-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-3">
+                <span class="font-mono text-[11px] text-slate-400">Changes update live immediately</span>
+                <button type="button" onclick="window.toggleEditorDrawer(false)" class="px-6 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm cursor-pointer">
+                    DONE & RETURN TO STAGE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Non-Blocking Toast Notification -->
+    <div id="toast-box" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-300">
+        <div class="px-4 py-2.5 rounded-2xl bg-slate-900/95 border border-emerald-500/50 text-emerald-300 font-mono text-xs shadow-2xl flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+            <span id="toast-msg">Updated!</span>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         5. COMPLETE APPLICATION JAVASCRIPT (CLEAN, SELF-CONTAINED, ERROR-FREE)
+    ====================================================================== -->
+    <script>
+        (function() {
+            "use strict";
+
+            /**
+             * DEFAULT_DOSSIER_CONFIG
+             * 10 Classified Chapters x 4 Media Feeds = 40 Surveillance Slots.
+             * At 8.5s per feed, the automated CCTV tour lasts 5 minutes 40 seconds (+ transitions = ~6 mins).
+             */
+            const DEFAULT_DOSSIER_CONFIG = {
+                agentName: "SIR / COACH [NAME]",
+                codename: "AGENT DRIP // BSIT-01",
+                bgmSrc: "",
+                bgmTitle: "SPY SYNTH GROOVE",
+                itemDurationMs: 8500,
+                finaleMessage: "Thank you for being more than just our BSIT club moderator—thank you for hyping us up, keeping the vibes immaculate, mentoring us through every bug and deadline, and always showing up with unmatched style and warmth. We appreciate you so much!",
+                chapters: [
+                    {
+                        id: "ch1",
+                        shortTitle: "CH 01: BRIEFING",
+                        code: "SECTOR 01 // SUBJECT PROFILE",
+                        title: "THE MAN,",
+                        highlight: "THE MYTH, THE ICON",
+                        accent: "emerald",
+                        layout: "hero-profile",
+                        items: [
+                            { id: "c1_1", label: "Hero Portrait", src: "", type: "image", aspect: "4:5 Portrait", tag: "SUBJECT_01", caption: "BSIT Club Moderator — Reporting for duty with 10/10 aura." },
+                            { id: "c1_2", label: "Lecture Mode", src: "", type: "image", aspect: "16:9 Wide", tag: "SERIOUS_CAM", caption: "When he switches to full Senior Dev / Professor mode." },
+                            { id: "c1_3", label: "Signature Smile", src: "", type: "image", aspect: "16:9 Wide", tag: "WARMTH_99%", caption: "The reassuring smile before a major BSIT defense." },
+                            { id: "c1_4", label: "Intro Clip", src: "", type: "video", aspect: "16:9 Video", tag: "INTRO_CLIP", caption: "Caught on camera: Iconic entrance into the lecture hall." }
+                        ]
+                    },
+                    {
+                        id: "ch2",
+                        shortTitle: "CH 02: LECTURE",
+                        code: "SECTOR 02 // SERIOUS & MENTOR MODE",
+                        title: "MASTERMIND",
+                        highlight: "IN ACTION",
+                        accent: "cyan",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c2_1", label: "Whiteboard Strategy", src: "", type: "image", aspect: "16:9 Wide", tag: "LOGIC_MAX", caption: "Explaining complex IT systems like it's effortless." },
+                            { id: "c2_2", label: "Deep Focus", src: "", type: "image", aspect: "16:9 Wide", tag: "FOCUS_LOCK", caption: "Analyzing student projects with laser precision." },
+                            { id: "c2_3", label: "Lecture Clip", src: "", type: "video", aspect: "16:9 Video", tag: "LECTURE_VID", caption: "Live wisdom drop during a BSIT club session." },
+                            { id: "c2_4", label: "Code Review", src: "", type: "image", aspect: "16:9 Wide", tag: "DEBUG_PRO", caption: "Finding the missing semicolon in 0.4 seconds." }
+                        ]
+                    },
+                    {
+                        id: "ch3",
+                        shortTitle: "CH 03: FASHION",
+                        code: "SECTOR 03 // RUNWAY SURVEILLANCE",
+                        title: "OUTFIT CHECK:",
+                        highlight: "MAIN CHARACTER DRIP",
+                        accent: "lavender",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c3_1", label: "Best OOTD #1", src: "", type: "image", aspect: "4:5 Portrait", tag: "FIT_CHECK_01", caption: "Campus hallway? No, that's his personal Paris Fashion Week." },
+                            { id: "c3_2", label: "Best OOTD #2", src: "", type: "image", aspect: "4:5 Portrait", tag: "FIT_CHECK_02", caption: "Color coordination level: Unmatched." },
+                            { id: "c3_3", label: "Outfit Transition Video", src: "", type: "video", aspect: "16:9 Video", tag: "DRIP_MOTION", caption: "Serving looks between back-to-back lectures." },
+                            { id: "c3_4", label: "Accessories & Details", src: "", type: "image", aspect: "4:5 Portrait", tag: "AESTHETIC_100", caption: "Every angle approved by the BSIT fashion committee." }
+                        ]
+                    },
+                    {
+                        id: "ch4",
+                        shortTitle: "CH 04: GEN-Z",
+                        code: "SECTOR 04 // CULTURAL FLUENCY",
+                        title: "GEN-Z CODED",
+                        highlight: "NO CAP, FR FR",
+                        accent: "coral",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c4_1", label: "Iconic Pose", src: "", type: "image", aspect: "16:9 Wide", tag: "SLAY_DETECTED", caption: "Understands every meme before the students even post it." },
+                            { id: "c4_2", label: "Gen-Z Reaction Clip", src: "", type: "video", aspect: "16:9 Video", tag: "VIBE_CHECK", caption: "Passing the Gen-Z vibe check with flying colors." },
+                            { id: "c4_3", label: "Selfie Angle", src: "", type: "image", aspect: "16:9 Wide", tag: "0.5X_LENS", caption: "Mastering the 0.5x wide-angle camera like a natural." },
+                            { id: "c4_4", label: "Squad Pic", src: "", type: "image", aspect: "16:9 Wide", tag: "BESTIE_ERA", caption: "Not just a moderator—an honorary member of the barkada." }
+                        ]
+                    },
+                    {
+                        id: "ch5",
+                        shortTitle: "CH 05: WHOLESOME",
+                        code: "SECTOR 05 // HEARTWARMING ARCHIVES",
+                        title: "PURE WARMTH &",
+                        highlight: "COMFORT VIBES",
+                        accent: "amber",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c5_1", label: "Candid Laugh", src: "", type: "image", aspect: "16:9 Wide", tag: "CORE_MEM_01", caption: "Always making everyone feel heard, valued, and welcome." },
+                            { id: "c5_2", label: "Mentoring Moment", src: "", type: "image", aspect: "16:9 Wide", tag: "CORE_MEM_02", caption: "Taking extra time to guide officers and members." },
+                            { id: "c5_3", label: "Wholesome Clip", src: "", type: "video", aspect: "16:9 Video", tag: "HEART_100%", caption: "A wholesome moment caught on BSIT club cameras." },
+                            { id: "c5_4", label: "Club Group Photo", src: "", type: "image", aspect: "16:9 Wide", tag: "BSIT_FAM", caption: "The glue that holds the entire organization together." }
+                        ]
+                    },
+                    {
+                        id: "ch6",
+                        shortTitle: "CH 06: CHAOS",
+                        code: "SECTOR 06 // UNFILTERED BLOOPERS",
+                        title: "CAUGHT IN 4K:",
+                        highlight: "CHAOTIC & FUNNY",
+                        accent: "coral",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c6_1", label: "Funny Face #1", src: "", type: "image", aspect: "16:9 Wide", tag: "EVIDENCE_01", caption: "Exhibit A: What happens when the camera shutter clicks too early." },
+                            { id: "c6_2", label: "Funny Clip #1", src: "", type: "video", aspect: "16:9 Video", tag: "BLOOPER_CAM", caption: "Leaked footage: Pure comedy gold during break time." },
+                            { id: "c6_3", label: "Reaction Meme", src: "", type: "image", aspect: "16:9 Wide", tag: "MEME_GOLD", caption: "POV: Someone says they forgot to push their code to GitHub." },
+                            { id: "c6_4", label: "Funny Clip #2", src: "", type: "video", aspect: "16:9 Video", tag: "UNSCRIPTED", caption: "Zero context needed—just legendary moderator energy." }
+                        ]
+                    },
+                    {
+                        id: "ch7",
+                        shortTitle: "CH 07: GRIND",
+                        code: "SECTOR 07 // CAFFEINE & CODE",
+                        title: "BEHIND THE",
+                        highlight: "SCENES GRIND",
+                        accent: "cyan",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c7_1", label: "Coffee Fuel", src: "", type: "image", aspect: "16:9 Wide", tag: "CAFFEINE_OP", caption: "Powered by iced coffee and pure dedication to BSIT." },
+                            { id: "c7_2", label: "Late Prep", src: "", type: "image", aspect: "16:9 Wide", tag: "OVERTIME", caption: "Reviewing event plans and presentations behind the scenes." },
+                            { id: "c7_3", label: "Desk Setup / Work Clip", src: "", type: "video", aspect: "16:9 Video", tag: "GRIND_MODE", caption: "Multitasking like an absolute pro." },
+                            { id: "c7_4", label: "Victory Stretch", src: "", type: "image", aspect: "16:9 Wide", tag: "MISSION_DONE", caption: "That feeling after a successful department activity." }
+                        ]
+                    },
+                    {
+                        id: "ch8",
+                        shortTitle: "CH 08: EVENTS",
+                        code: "SECTOR 08 // CAMPUS TAKEOVER",
+                        title: "BSIT EVENTS &",
+                        highlight: "HYPE SQUAD",
+                        accent: "lavender",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c8_1", label: "Event Stage / Host", src: "", type: "image", aspect: "16:9 Wide", tag: "STAGE_PRESENCE", caption: "Commanding the room at BSIT assemblies and seminars." },
+                            { id: "c8_2", label: "Event Hype Video", src: "", type: "video", aspect: "16:9 Video", tag: "HYPE_REEL", caption: "Cheering louder than anyone else for our BSIT reps!" },
+                            { id: "c8_3", label: "Backstage Candid", src: "", type: "image", aspect: "16:9 Wide", tag: "BACKSTAGE", caption: "Keeping everyone calm and hyped before showtime." },
+                            { id: "c8_4", label: "Awarding / Celebration", src: "", type: "image", aspect: "16:9 Wide", tag: "CHAMPION_VIBE", caption: "Celebrating every milestone with the whole club." }
+                        ]
+                    },
+                    {
+                        id: "ch9",
+                        shortTitle: "CH 09: UNDERCOVER",
+                        code: "SECTOR 09 // SECRET PAPARAZZI",
+                        title: "UNDERCOVER",
+                        highlight: "CANDID ANGLES",
+                        accent: "emerald",
+                        layout: "grid-4",
+                        items: [
+                            { id: "c9_1", label: "Hallway Walk", src: "", type: "image", aspect: "16:9 Wide", tag: "CCTV_HALL_A", caption: "Spotted on Campus CCTV: Looking iconic even off-guard." },
+                            { id: "c9_2", label: "Secret Video", src: "", type: "video", aspect: "16:9 Video", tag: "HIDDEN_CAM", caption: "He didn't even know we were recording this gem." },
+                            { id: "c9_3", label: "Side Profile", src: "", type: "image", aspect: "16:9 Wide", tag: "ANGLE_03", caption: "Zero bad angles—scientifically proven by BSIT." },
+                            { id: "c9_4", label: "Candid Gesture", src: "", type: "image", aspect: "16:9 Wide", tag: "SNAPSHOT_09", caption: "Every frame tells a story of kindness and humor." }
+                        ]
+                    },
+                    {
+                        id: "ch10",
+                        shortTitle: "CH 10: SALUTE",
+                        code: "SECTOR 10 // FINAL DECRYPTION",
+                        title: "FINAL",
+                        highlight: "AGENT SALUTE",
+                        accent: "emerald",
+                        layout: "finale-3",
+                        items: [
+                            { id: "c10_1", label: "Favorite Portrait", src: "", type: "image", aspect: "16:9 Wide", tag: "LEGEND_01", caption: "To the coolest moderator in BSIT history." },
+                            { id: "c10_2", label: "Group Tribute Clip", src: "", type: "video", aspect: "16:9 Video", tag: "SALUTE_VID", caption: "A special shoutout from your BSIT family!" },
+                            { id: "c10_3", label: "Iconic Closing Shot", src: "", type: "image", aspect: "16:9 Wide", tag: "FOREVER_ICON", caption: "We appreciate you today and always!" }
+                        ]
+                    }
+                ]
+            };
+
+            // Application State
+            let config = JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG));
+            let currentChapterIdx = 0;
+            let currentItemIdxInChapter = 0;
+            let isPlaying = true;
+            let isZoomOpen = false;
+            let itemHoldInterval = null;
+            let startTransitionTimeout = null;
+            let itemElapsedMs = 0;
+            let currentHoldTargetMs = config.itemDurationMs;
+
+            // ===================================================================
+            // HELPER FUNCTIONS FOR PLAYLIST & RUNTIME CALCULATION
+            // ===================================================================
+            function getFlattenedPlaylist() {
+                const list = [];
+                config.chapters.forEach((ch, cIdx) => {
+                    ch.items.forEach((item, iIdx) => {
+                        list.push({ chapterIdx: cIdx, itemIdx: iIdx, chapter: ch, item });
+                    });
+                });
+                return list;
+            }
+
+            function getCurrentFlatIndex() {
+                const list = getFlattenedPlaylist();
+                const found = list.findIndex(
+                    entry => entry.chapterIdx === currentChapterIdx && entry.itemIdx === currentItemIdxInChapter
+                );
+                return found >= 0 ? found : 0;
+            }
+
+            function formatSecondsToMMSS(totalSecs) {
+                const clamped = Math.max(0, Math.floor(totalSecs));
+                const mins = String(Math.floor(clamped / 60)).padStart(2, '0');
+                const secs = String(clamped % 60).padStart(2, '0');
+                return `${mins}:${secs}`;
+            }
+
+            function updateRuntimeHUD() {
+                const list = getFlattenedPlaylist();
+                const totalFeeds = Math.max(1, list.length);
+                const currentFlat = getCurrentFlatIndex();
+                const perItemSec = (config.itemDurationMs || 8500) / 1000;
+                const totalSec = totalFeeds * perItemSec;
+                const elapsedSec = (currentFlat * perItemSec) + (itemElapsedMs / 1000);
+                const remainingSec = Math.max(0, totalSec - elapsedSec);
+
+                const runtimeEl = document.getElementById('hud-runtime-display');
+                if (runtimeEl) {
+                    runtimeEl.textContent = `RUNTIME: ${formatSecondsToMMSS(elapsedSec)} / ${formatSecondsToMMSS(totalSec)}`;
+                }
+
+                const remEl = document.getElementById('footer-time-remaining');
+                if (remEl) {
+                    remEl.textContent = `REM: ${formatSecondsToMMSS(remainingSec)}`;
+                }
+
+                const counterEl = document.getElementById('slide-counter');
+                if (counterEl) {
+                    counterEl.textContent = `${String(currentFlat + 1).padStart(2, '0')} / ${String(totalFeeds).padStart(2, '0')}`;
+                }
+
+                const overallProgress = document.getElementById('autoplay-progress');
+                if (overallProgress) {
+                    const pct = Math.min(100, (elapsedSec / Math.max(1, totalSec)) * 100);
+                    overallProgress.style.width = `${pct}%`;
+                }
+            }
+
+            // ===================================================================
+            // DUAL-MODE BACKGROUND MUSIC ENGINE WITH SMOOTH VIDEO AUTO-DUCKING
+            // ===================================================================
+            class SpyAudioEngine {
+                constructor() {
+                    this.ctx = null;
+                    this.synthMasterGain = null;
+                    this.isMuted = false;
+                    this.isDucked = false;
+                    this.baseVolume = 0.75;
+                    this.duckRatio = 0.15;
+                    this.currentGainFactor = 0.0;
+                    this.targetGainFactor = 1.0;
+
+                    this.bgmAudio = new Audio();
+                    this.bgmAudio.loop = true;
+                    this.bgmAudio.preload = 'auto';
+                    this.hasCustomBgm = false;
+                    this.trackName = 'SPY SYNTH';
+
+                    this.bgInterval = null;
+                    this.step = 0;
+                    this.bassNotes = [82.41, 82.41, 98.00, 110.00, 116.54, 110.00, 98.00, 82.41];
+                    this.padChords = [
+                        [164.81, 196.00, 246.94],
+                        [174.61, 220.00, 261.63]
+                    ];
+
+                    this.fadeInterval = setInterval(() => this.tickVolumeEnvelope(), 30);
+                }
+
+                init() {
+                    try {
+                        if (!this.ctx) {
+                            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                            if (AudioCtx) {
+                                this.ctx = new AudioCtx();
+                                this.synthMasterGain = this.ctx.createGain();
+                                this.synthMasterGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+                                this.synthMasterGain.connect(this.ctx.destination);
+                            }
+                        }
+                        if (this.ctx && this.ctx.state === 'suspended') {
+                            this.ctx.resume().catch(() => {});
+                        }
+                    } catch (e) {}
+                }
+
+                tickVolumeEnvelope() {
+                    if (this.isMuted) {
+                        this.targetGainFactor = 0.0;
+                    } else if (this.isDucked) {
+                        this.targetGainFactor = this.duckRatio;
+                    } else {
+                        this.targetGainFactor = 1.0;
+                    }
+
+                    const smoothing = this.targetGainFactor < this.currentGainFactor ? 0.14 : 0.09;
+                    this.currentGainFactor += (this.targetGainFactor - this.currentGainFactor) * smoothing;
+
+                    if (Math.abs(this.targetGainFactor - this.currentGainFactor) < 0.003) {
+                        this.currentGainFactor = this.targetGainFactor;
+                    }
+
+                    const effectiveVol = Math.max(0, Math.min(1, this.baseVolume * this.currentGainFactor));
+
+                    if (this.hasCustomBgm) {
+                        this.bgmAudio.volume = effectiveVol;
+                    }
+
+                    if (this.ctx && this.synthMasterGain) {
+                        try {
+                            this.synthMasterGain.gain.setTargetAtTime(
+                                this.hasCustomBgm ? 0.0001 : Math.max(0.0001, effectiveVol),
+                                this.ctx.currentTime,
+                                0.04
+                            );
+                        } catch (e) {}
+                    }
+                }
+
+                loadCustomTrack(url, fileName = 'CUSTOM BGM') {
+                    this.init();
+                    this.bgmAudio.src = url;
+                    this.hasCustomBgm = true;
+                    this.trackName = fileName.replace(/\.[^/.]+$/, '').toUpperCase();
+                    this.bgmAudio.volume = this.isMuted ? 0 : this.baseVolume * (this.isDucked ? this.duckRatio : 1);
+
+                    const appEl = document.getElementById('presentation-app');
+                    if (appEl && !appEl.classList.contains('hidden')) {
+                        this.bgmAudio.play().catch(() => {});
+                    }
+                    this.updateAudioHUD();
+                }
+
+                clearCustomTrack() {
+                    this.bgmAudio.pause();
+                    this.bgmAudio.src = '';
+                    this.hasCustomBgm = false;
+                    this.trackName = 'SPY SYNTH';
+                    this.startSpyGroove();
+                    this.updateAudioHUD();
+                }
+
+                setBaseVolume(val) {
+                    this.baseVolume = Math.max(0, Math.min(1, parseFloat(val)));
+                    const pct = Math.round(this.baseVolume * 100);
+
+                    const hudSlider = document.getElementById('hud-bgm-volume');
+                    const edSlider = document.getElementById('editor-bgm-volume');
+                    const edLabel = document.getElementById('editor-vol-label');
+                    if (hudSlider) hudSlider.value = pct;
+                    if (edSlider) edSlider.value = pct;
+                    if (edLabel) edLabel.textContent = `${pct}%`;
+
+                    if (this.baseVolume > 0 && this.isMuted) {
+                        this.isMuted = false;
+                    }
+                    this.updateAudioHUD();
+                }
+
+                setDuckRatio(val) {
+                    this.duckRatio = Math.max(0, Math.min(0.5, parseFloat(val)));
+                    const edLabel = document.getElementById('editor-duck-label');
+                    if (edLabel) edLabel.textContent = `${Math.round(this.duckRatio * 100)}%`;
+                }
+
+                setDucked(shouldDuck) {
+                    if (this.isDucked === shouldDuck) return;
+                    this.isDucked = shouldDuck;
+
+                    const zoomBadge = document.getElementById('zoom-ducking-badge');
+                    if (zoomBadge) {
+                        if (shouldDuck && !this.isMuted) {
+                            zoomBadge.classList.remove('hidden');
+                            zoomBadge.classList.add('inline-flex');
+                        } else {
+                            zoomBadge.classList.add('hidden');
+                            zoomBadge.classList.remove('inline-flex');
+                        }
+                    }
+                    this.updateAudioHUD();
+                }
+
+                updateAudioHUD() {
+                    const icon = document.getElementById('icon-audio');
+                    const stateEl = document.getElementById('hud-bgm-state');
+                    const trackEl = document.getElementById('hud-bgm-track');
+                    const eqBars = document.getElementById('hud-eq-bars');
+                    const pill = document.getElementById('hud-bgm-pill');
+
+                    if (icon) {
+                        icon.setAttribute('data-lucide', this.isMuted ? 'volume-x' : (this.isDucked ? 'volume-1' : 'volume-2'));
+                        if (window.lucide) window.lucide.createIcons();
+                    }
+
+                    if (trackEl) {
+                        trackEl.textContent = this.trackName;
+                    }
+
+                    if (stateEl && pill) {
+                        if (this.isMuted) {
+                            stateEl.textContent = 'MUTED';
+                            stateEl.className = 'font-mono text-[9px] font-bold text-rose-400 tracking-wider';
+                            pill.classList.remove('border-amber-500/50', 'border-emerald-500/40');
+                            pill.classList.add('border-slate-700/80');
+                            if (eqBars) eqBars.classList.add('opacity-20');
+                        } else if (this.isDucked) {
+                            stateEl.textContent = 'DUCKED - VIDEO ACTIVE';
+                            stateEl.className = 'font-mono text-[9px] font-bold text-amber-400 tracking-wider';
+                            pill.classList.remove('border-slate-700/80', 'border-emerald-500/40');
+                            pill.classList.add('border-amber-500/50');
+                            if (eqBars) eqBars.classList.remove('opacity-20');
+                        } else {
+                            stateEl.textContent = 'PLAYING';
+                            stateEl.className = 'font-mono text-[9px] font-bold text-emerald-400 tracking-wider';
+                            pill.classList.remove('border-slate-700/80', 'border-amber-500/50');
+                            pill.classList.add('border-emerald-500/40');
+                            if (eqBars) eqBars.classList.remove('opacity-20');
+                        }
+                    }
+                }
+
+                playBlip(freq = 880, duration = 0.08, type = 'sine', vol = 0.07) {
+                    if (this.isMuted) return;
+                    try {
+                        this.init();
+                        if (!this.ctx) return;
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = type;
+                        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + duration);
+                    } catch (e) {}
+                }
+
+                playZoomWhoosh(expanding = true) {
+                    if (this.isMuted) return;
+                    try {
+                        this.init();
+                        if (!this.ctx) return;
+                        const now = this.ctx.currentTime;
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        if (expanding) {
+                            osc.frequency.setValueAtTime(220, now);
+                            osc.frequency.exponentialRampToValueAtTime(760, now + 0.28);
+                        } else {
+                            osc.frequency.setValueAtTime(680, now);
+                            osc.frequency.exponentialRampToValueAtTime(200, now + 0.24);
+                        }
+                        gain.gain.setValueAtTime(0.07, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now);
+                        osc.stop(now + 0.3);
+                    } catch (e) {}
+                }
+
+                playDecryptSweep() {
+                    if (this.isMuted) return;
+                    try {
+                        this.init();
+                        if (!this.ctx) return;
+                        const now = this.ctx.currentTime;
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(140, now);
+                        osc.frequency.exponentialRampToValueAtTime(920, now + 0.55);
+                        gain.gain.setValueAtTime(0.11, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now);
+                        osc.stop(now + 0.6);
+                    } catch (e) {}
+                }
+
+                startBackgroundMusic() {
+                    this.init();
+                    this.currentGainFactor = 0.0;
+                    if (this.hasCustomBgm) {
+                        this.bgmAudio.play().catch(() => {});
+                    }
+                    this.startSpyGroove();
+                    this.updateAudioHUD();
+                }
+
+                startSpyGroove() {
+                    if (this.bgInterval) return;
+                    this.init();
+                    this.bgInterval = setInterval(() => {
+                        if (this.isMuted || this.hasCustomBgm || !this.ctx || !this.synthMasterGain) return;
+                        try {
+                            const now = this.ctx.currentTime;
+                            const freq = this.bassNotes[this.step % this.bassNotes.length];
+
+                            const osc = this.ctx.createOscillator();
+                            const noteGain = this.ctx.createGain();
+                            osc.type = 'triangle';
+                            osc.frequency.setValueAtTime(freq, now);
+                            noteGain.gain.setValueAtTime(0.16, now);
+                            noteGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+                            osc.connect(noteGain);
+                            noteGain.connect(this.synthMasterGain);
+                            osc.start(now);
+                            osc.stop(now + 0.29);
+
+                            if (this.step % 4 === 2) {
+                                const hatOsc = this.ctx.createOscillator();
+                                const hatGain = this.ctx.createGain();
+                                hatOsc.type = 'square';
+                                hatOsc.frequency.setValueAtTime(3400, now);
+                                hatGain.gain.setValueAtTime(0.025, now);
+                                hatGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                                hatOsc.connect(hatGain);
+                                hatGain.connect(this.synthMasterGain);
+                                hatOsc.start(now);
+                                hatOsc.stop(now + 0.045);
+                            }
+
+                            if (this.step % 8 === 0) {
+                                const chord = this.padChords[(this.step / 8) % this.padChords.length];
+                                chord.forEach(chordFreq => {
+                                    const padOsc = this.ctx.createOscillator();
+                                    const padGain = this.ctx.createGain();
+                                    padOsc.type = 'sine';
+                                    padOsc.frequency.setValueAtTime(chordFreq, now);
+                                    padGain.gain.setValueAtTime(0.001, now);
+                                    padGain.gain.linearRampToValueAtTime(0.045, now + 0.35);
+                                    padGain.gain.exponentialRampToValueAtTime(0.001, now + 2.4);
+                                    padOsc.connect(padGain);
+                                    padGain.connect(this.synthMasterGain);
+                                    padOsc.start(now);
+                                    padOsc.stop(now + 2.5);
+                                });
+                            }
+
+                            this.step++;
+                        } catch (e) {}
+                    }, 340);
+                }
+
+                toggleMute() {
+                    this.isMuted = !this.isMuted;
+                    if (!this.isMuted && this.hasCustomBgm && this.bgmAudio.paused) {
+                        this.bgmAudio.play().catch(() => {});
+                    }
+                    this.updateAudioHUD();
+                    showToast(this.isMuted ? 'Background Music Muted' : `BGM Active (${this.trackName})`);
+                }
+            }
+
+            const spyAudio = new SpyAudioEngine();
+
+            // ===================================================================
+            // UI & IDENTITY SYNC
+            // ===================================================================
+            function syncIdentityLabels() {
+                const bootName = document.getElementById('boot-agent-name');
+                const hudName = document.getElementById('hud-agent-name');
+                const inName = document.getElementById('input-agent-name');
+                const inCode = document.getElementById('input-codename');
+                const inFinale = document.getElementById('input-finale-msg');
+
+                if (bootName) bootName.textContent = config.agentName;
+                if (hudName) hudName.textContent = config.agentName;
+                if (inName) inName.value = config.agentName;
+                if (inCode) inCode.value = config.codename;
+                if (inFinale) inFinale.value = config.finaleMessage;
+            }
+
+            function startDecryption() {
+                spyAudio.init();
+                spyAudio.playDecryptSweep();
+                const log = document.getElementById('terminal-log');
+                if (log) {
+                    log.innerHTML += `<div class="text-emerald-300 font-bold">> ACCESS GRANTED! Initiating 10-Chapter CCTV Surveillance Tour...</div>`;
+                    log.scrollTop = log.scrollHeight;
+                }
+
+                setTimeout(() => {
+                    const boot = document.getElementById('boot-screen');
+                    if (boot) {
+                        boot.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
+                    }
+
+                    const app = document.getElementById('presentation-app');
+                    if (app) {
+                        app.classList.remove('hidden');
+                        app.classList.add('flex');
+                    }
+
+                    spyAudio.startBackgroundMusic();
+                    renderChapter(0);
+                    if (isPlaying) {
+                        scheduleNextItemZoom(0, 0, 900);
+                    }
+                }, 550);
+            }
+
+            function changePace(newMs) {
+                config.itemDurationMs = parseInt(newMs, 10) || 8500;
+                currentHoldTargetMs = config.itemDurationMs;
+
+                const paceSel = document.getElementById('pace-selector');
+                if (paceSel && [...paceSel.options].some(o => o.value === String(config.itemDurationMs))) {
+                    paceSel.value = String(config.itemDurationMs);
+                }
+
+                const durSlider = document.getElementById('editor-duration-slider');
+                const durLabel = document.getElementById('editor-duration-label');
+                if (durSlider) durSlider.value = config.itemDurationMs;
+                if (durLabel) {
+                    const totalSec = getFlattenedPlaylist().length * (config.itemDurationMs / 1000);
+                    durLabel.textContent = `${(config.itemDurationMs / 1000).toFixed(1)}s (~${formatSecondsToMMSS(totalSec)} Total)`;
+                }
+
+                updateRuntimeHUD();
+                showToast(`Pace updated: ${(config.itemDurationMs / 1000).toFixed(1)}s per feed`);
+            }
+
+            // ===================================================================
+            // MEDIA CARD RENDERER
+            // ===================================================================
+            function renderMediaCard(chapterIdx, itemIdx, extraClasses = '') {
+                const chapter = config.chapters[chapterIdx];
+                const item = chapter.items[itemIdx];
+                const hasMedia = item.src && item.src.trim() !== '';
+                const cardDomId = `media-card-${chapterIdx}-${itemIdx}`;
+
+                if (hasMedia) {
+                    const mediaPreview = item.type === 'video'
+                        ? `<video src="${item.src}" class="w-full h-full object-cover" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`
+                        : `<img src="${item.src}" alt="${item.label}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.style.display='none'">`;
+
+                    return `
+                        <div id="${cardDomId}" onclick="window.openCctvZoom(${chapterIdx}, ${itemIdx}, true)" title="Click for CCTV 400% Close-Up Zoom" class="viewfinder group relative overflow-hidden rounded-2xl bg-slate-950 border border-slate-700/80 hover:border-emerald-400 shadow-xl transition-all duration-300 cursor-pointer ${extraClasses}">
+                            ${mediaPreview}
+                            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-emerald-500/40 font-mono text-[10px] text-emerald-400 flex items-center gap-1.5 pointer-events-none">
+                                <span class="w-1.5 h-1.5 rounded-full ${item.type === 'video' ? 'bg-rose-500 animate-ping' : 'bg-emerald-400'}"></span>
+                                <span>${item.tag}</span>
+                            </div>
+                            <div class="absolute top-3 right-3 p-1.5 rounded-lg bg-black/60 text-emerald-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <i data-lucide="scan-search" class="w-4 h-4"></i>
+                            </div>
+                            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-3 pt-8 pointer-events-none">
+                                <p class="font-sans text-xs sm:text-sm font-medium text-white line-clamp-2">${item.caption}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const isVideo = item.type === 'video';
+                return `
+                    <div id="${cardDomId}" onclick="window.openCctvZoom(${chapterIdx}, ${itemIdx}, true)" title="Click to inspect CCTV feed or upload media" class="viewfinder group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/95 via-slate-950 to-slate-900 border border-dashed border-emerald-500/35 hover:border-purple-400 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center p-4 text-center ${extraClasses}">
+                        <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] text-emerald-400">
+                            ${item.tag}
+                        </div>
+                        <button type="button" onclick="event.stopPropagation(); window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" title="Upload Photo/Video Here" class="absolute top-2 right-2 px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-400 text-emerald-300 hover:text-slate-950 font-mono text-[10px] font-bold transition-all cursor-pointer z-20">
+                            + UPLOAD
+                        </button>
+
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 group-hover:bg-purple-500/20 border border-emerald-500/30 group-hover:border-purple-400 flex items-center justify-center text-emerald-400 group-hover:text-purple-300 mb-2 transition-transform group-hover:scale-110">
+                            <i data-lucide="${isVideo ? 'video' : 'camera'}" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-mono text-[11px] font-bold text-slate-200 group-hover:text-purple-300">
+                            ${isVideo ? 'VIDEO FEED STANDBY' : 'PHOTO FEED STANDBY'}
+                        </span>
+                        <span class="font-mono text-[10px] text-slate-500 mt-0.5 max-w-[200px] truncate">
+                            ${item.label}
+                        </span>
+
+                        <div class="absolute bottom-2 inset-x-2.5 px-2.5 py-1 rounded-xl bg-black/70 border border-slate-800/80">
+                            <p class="font-sans text-[11px] text-slate-300 truncate">"${item.caption}"</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // ===================================================================
+            // CHAPTER STAGE RENDERING
+            // ===================================================================
+            function getAccentClasses(accent) {
+                const map = {
+                    emerald: { text: 'text-emerald-400', border: 'border-emerald-500/30', bg: 'bg-emerald-500/15' },
+                    cyan: { text: 'text-cyan-400', border: 'border-cyan-500/30', bg: 'bg-cyan-500/15' },
+                    lavender: { text: 'text-purple-400', border: 'border-purple-500/30', bg: 'bg-purple-500/15' },
+                    coral: { text: 'text-rose-400', border: 'border-rose-500/30', bg: 'bg-rose-500/15' },
+                    amber: { text: 'text-amber-400', border: 'border-amber-500/30', bg: 'bg-amber-500/15' }
+                };
+                return map[accent] || map.emerald;
+            }
+
+            function getChapterHTML(chapterIdx) {
+                const ch = config.chapters[chapterIdx];
+                const acc = getAccentClasses(ch.accent);
+                const items = ch.items;
+
+                const headerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div>
+                            <span class="font-mono text-xs ${acc.text} uppercase tracking-widest">${ch.code}</span>
+                            <h2 class="font-display text-2xl sm:text-4xl font-extrabold text-white">
+                                ${ch.title} <span class="${acc.text}">${ch.highlight}</span>
+                            </h2>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1 rounded-full ${acc.bg} border ${acc.border} ${acc.text} font-mono text-xs">
+                                ${items.length} FEEDS IN SECTOR
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                if (ch.layout === 'hero-profile') {
+                    return `
+                        <div class="slide-enter w-full grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                            <div class="lg:col-span-5 h-[340px] sm:h-[440px]">
+                                ${renderMediaCard(chapterIdx, 0, 'h-full w-full')}
+                            </div>
+                            <div class="lg:col-span-7 space-y-4">
+                                <div class="bg-spy-card/85 backdrop-blur-md border border-slate-800 rounded-3xl p-5 sm:p-6 space-y-4">
+                                    <div class="flex flex-wrap items-center justify-between gap-2">
+                                        <span class="px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 font-mono text-xs">${config.codename}</span>
+                                        <span class="classified-stamp text-emerald-400 text-xs">TOP SECRET // ICON</span>
+                                    </div>
+                                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">${config.agentName}</h2>
+                                    <div class="grid grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
+                                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                                            <div class="text-slate-400">DRIP LEVEL</div>
+                                            <div class="text-emerald-400 font-bold mt-0.5">100% RUNWAY</div>
+                                        </div>
+                                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                                            <div class="text-slate-400">GEN-Z CODED</div>
+                                            <div class="text-rose-400 font-bold mt-0.5">NO CAP (∞)</div>
+                                        </div>
+                                        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800">
+                                            <div class="text-slate-400">WARMTH</div>
+                                            <div class="text-amber-400 font-bold mt-0.5">MAX HEART</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 h-[180px] sm:h-[200px]">
+                                    ${items.slice(1).map((_, idx) => renderMediaCard(chapterIdx, idx + 1, 'h-full w-full')).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (ch.layout === 'finale-3') {
+                    return `
+                        <div class="slide-enter w-full max-w-6xl mx-auto space-y-5">
+                            <div class="text-center space-y-2">
+                                <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-mono text-xs">
+                                    <i data-lucide="award" class="w-4 h-4"></i>
+                                    <span>MISSION ACCOMPLISHED // BSIT CLUB TRIBUTE</span>
+                                </div>
+                                <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white">
+                                    WE APPRECIATE YOU, <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-purple-400 to-rose-400">${config.agentName}!</span>
+                                </h2>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-[230px] sm:h-[260px]">
+                                ${items.map((_, idx) => renderMediaCard(chapterIdx, idx, 'h-full w-full')).join('')}
+                            </div>
+
+                            <div class="bg-spy-card/90 border border-emerald-500/30 rounded-3xl p-5 sm:p-6 max-w-3xl mx-auto text-center shadow-2xl">
+                                <p class="text-slate-200 text-sm sm:text-base leading-relaxed font-medium">
+                                    "${config.finaleMessage}"
+                                </p>
+                                <div class="mt-4 pt-3 border-t border-slate-800 flex flex-wrap items-center justify-center gap-4 font-mono text-xs text-emerald-400">
+                                    <span>SIGNED: YOUR BSIT CLUB FAMILY</span>
+                                    <button type="button" onclick="window.fireCelebrationConfetti()" class="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 cursor-pointer">
+                                        🎉 LAUNCH CONFETTI
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const colsClass = items.length <= 2 ? 'md:grid-cols-2' : items.length === 3 ? 'md:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4';
+                return `
+                    <div class="slide-enter w-full">
+                        ${headerHTML}
+                        <div class="grid grid-cols-1 ${colsClass} gap-4">
+                            ${items.map((_, idx) => renderMediaCard(chapterIdx, idx, 'h-[240px] sm:h-[340px] w-full')).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            function renderChapter(chapterIdx) {
+                currentChapterIdx = (chapterIdx + config.chapters.length) % config.chapters.length;
+                const stage = document.getElementById('slide-stage');
+                if (stage) {
+                    stage.innerHTML = getChapterHTML(currentChapterIdx);
+                }
+                if (window.lucide) window.lucide.createIcons();
+
+                const footerTag = document.getElementById('footer-chapter-tag');
+                if (footerTag) {
+                    footerTag.textContent = `CH ${String(currentChapterIdx + 1).padStart(2, '0')}/${String(config.chapters.length).padStart(2, '0')}`;
+                }
+                updateChapterIndicators();
+                updateRuntimeHUD();
+
+                if (currentChapterIdx === config.chapters.length - 1) {
+                    fireCelebrationConfetti();
+                }
+            }
+
+            function updateChapterIndicators() {
+                const container = document.getElementById('slide-indicators');
+                if (!container) return;
+
+                container.innerHTML = config.chapters.map((ch, idx) => {
+                    const active = idx === currentChapterIdx;
+                    return `
+                        <button type="button" onclick="window.jumpToChapter(${idx})" class="px-2 py-1 rounded-lg font-mono text-[10px] whitespace-nowrap transition-all cursor-pointer ${
+                            active 
+                            ? 'bg-emerald-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(0,255,136,0.5)]' 
+                            : 'bg-slate-900/90 text-slate-400 hover:text-white border border-slate-800'
+                        }">
+                            ${ch.shortTitle}
+                        </button>
+                    `;
+                }).join('');
+
+                const activeBtn = container.children[currentChapterIdx];
+                if (activeBtn) {
+                    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }
+
+            // ===================================================================
+            // CCTV SPY CLOSE-UP ZOOM ENGINE (FLIP ORIGIN-TO-FULLSCREEN)
+            // ===================================================================
+            function openCctvZoom(chapterIdx, itemIdx, isManualClick = false) {
+                clearTimeout(startTransitionTimeout);
+                clearInterval(itemHoldInterval);
+
+                if (chapterIdx !== currentChapterIdx) {
+                    renderChapter(chapterIdx);
+                }
+
+                currentChapterIdx = chapterIdx;
+                currentItemIdxInChapter = itemIdx;
+                updateRuntimeHUD();
+
+                const ch = config.chapters[chapterIdx];
+                const item = ch.items[itemIdx];
+                const sourceCard = document.getElementById(`media-card-${chapterIdx}-${itemIdx}`);
+
+                document.querySelectorAll('.cctv-locked').forEach(el => el.classList.remove('cctv-locked'));
+                if (sourceCard) {
+                    sourceCard.classList.add('cctv-locked');
+                    sourceCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+
+                const statusEl = document.getElementById('footer-item-status');
+                if (statusEl) statusEl.textContent = `LOCKED: ${item.tag}`;
+
+                document.getElementById('zoom-tag').textContent = `${item.tag} // FEED #${getCurrentFlatIndex() + 1}`;
+                document.getElementById('zoom-chapter-badge').textContent = ch.shortTitle;
+                document.getElementById('zoom-subtitle').textContent = `${ch.code} — ${item.label}`;
+                document.getElementById('zoom-caption').textContent = item.caption;
+
+                const mediaContainer = document.getElementById('cctv-zoom-media');
+                const hasMedia = item.src && item.src.trim() !== '';
+
+                if (hasMedia) {
+                    if (item.type === 'video') {
+                        spyAudio.setDucked(true);
+                        mediaContainer.innerHTML = `
+                            <video id="active-zoom-video" src="${item.src}" class="w-full h-full object-contain bg-black" autoplay playsinline controls></video>
+                        `;
+                        const vidEl = document.getElementById('active-zoom-video');
+                        if (vidEl) {
+                            vidEl.muted = false;
+                            vidEl.volume = 1.0;
+                            vidEl.addEventListener('play', () => spyAudio.setDucked(true));
+                            vidEl.addEventListener('pause', () => {
+                                if (!vidEl.ended) spyAudio.setDucked(false);
+                            });
+                            vidEl.addEventListener('ended', () => spyAudio.setDucked(false));
+                            vidEl.play().catch(() => {
+                                vidEl.muted = true;
+                                vidEl.play().catch(() => {});
+                            });
+                        }
+                    } else {
+                        spyAudio.setDucked(false);
+                        mediaContainer.innerHTML = `
+                            <img src="${item.src}" alt="${item.label}" class="w-full h-full object-contain animate-ken-burns select-none">
+                        `;
+                    }
+                } else {
+                    spyAudio.setDucked(false);
+                    mediaContainer.innerHTML = `
+                        <div class="w-full h-full bg-spy-bg bg-spy-grid flex flex-col items-center justify-center p-6 text-center relative">
+                            <div class="w-24 h-24 rounded-full border-2 border-dashed border-emerald-500/50 flex items-center justify-center mb-5 animate-[spin_12s_linear_infinite]">
+                                <div class="w-16 h-16 rounded-full border border-purple-400/60"></div>
+                            </div>
+                            <i data-lucide="${item.type === 'video' ? 'video' : 'camera'}" class="w-10 h-10 text-emerald-400 -mt-16 mb-7"></i>
+                            <div class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 font-mono text-xs text-emerald-300 mb-2">
+                                SURVEILLANCE SLOT READY // ${item.aspect}
+                            </div>
+                            <h3 class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">${item.label}</h3>
+                            <p class="font-mono text-xs text-slate-400 max-w-md mb-5">
+                                Drop your photo or video into this slot via the button below or the INTEL drawer!
+                            </p>
+                            <button type="button" onclick="window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" class="px-5 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm flex items-center gap-2 shadow-lg cursor-pointer">
+                                <i data-lucide="upload" class="w-4 h-4"></i>
+                                <span>UPLOAD PHOTO / VIDEO NOW</span>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                if (window.lucide) window.lucide.createIcons();
+
+                const overlay = document.getElementById('cctv-zoom-overlay');
+                const backdrop = document.getElementById('cctv-zoom-backdrop');
+                const zoomCard = document.getElementById('cctv-zoom-card');
+
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                isZoomOpen = true;
+
+                spyAudio.playZoomWhoosh(true);
+
+                if (sourceCard) {
+                    const first = sourceCard.getBoundingClientRect();
+                    const last = zoomCard.getBoundingClientRect();
+
+                    const deltaX = (first.left + first.width / 2) - (last.left + last.width / 2);
+                    const deltaY = (first.top + first.height / 2) - (last.top + last.height / 2);
+                    const scaleX = Math.max(0.15, first.width / last.width);
+                    const scaleY = Math.max(0.15, first.height / last.height);
+
+                    zoomCard.style.transition = 'none';
+                    zoomCard.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
+                    zoomCard.style.opacity = '0.35';
+
+                    void zoomCard.offsetHeight;
+
+                    zoomCard.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease';
+                    zoomCard.style.transform = 'translate(0px, 0px) scale(1, 1)';
+                    zoomCard.style.opacity = '1';
+                }
+
+                requestAnimationFrame(() => {
+                    backdrop.classList.remove('opacity-0');
+                    backdrop.classList.add('opacity-100');
+                });
+
+                startItemHoldTimer();
+            }
+
+            function closeCctvZoom(pauseAutoplay = false, callbackAfterClose = null) {
+                clearInterval(itemHoldInterval);
+                clearTimeout(startTransitionTimeout);
+
+                if (pauseAutoplay && isPlaying) {
+                    togglePlayPause();
+                }
+
+                const overlay = document.getElementById('cctv-zoom-overlay');
+                const backdrop = document.getElementById('cctv-zoom-backdrop');
+                const zoomCard = document.getElementById('cctv-zoom-card');
+
+                if (!isZoomOpen) {
+                    if (callbackAfterClose) callbackAfterClose();
+                    return;
+                }
+
+                spyAudio.playZoomWhoosh(false);
+                spyAudio.setDucked(false);
+
+                const vid = document.getElementById('active-zoom-video');
+                if (vid) vid.pause();
+
+                const sourceCard = document.getElementById(`media-card-${currentChapterIdx}-${currentItemIdxInChapter}`);
+                if (sourceCard) {
+                    const first = sourceCard.getBoundingClientRect();
+                    const last = zoomCard.getBoundingClientRect();
+
+                    const deltaX = (first.left + first.width / 2) - (last.left + last.width / 2);
+                    const deltaY = (first.top + first.height / 2) - (last.top + last.height / 2);
+                    const scaleX = Math.max(0.15, first.width / last.width);
+                    const scaleY = Math.max(0.15, first.height / last.height);
+
+                    zoomCard.style.transition = 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease';
+                    zoomCard.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
+                    zoomCard.style.opacity = '0';
+                } else {
+                    zoomCard.style.opacity = '0';
+                }
+
+                backdrop.classList.remove('opacity-100');
+                backdrop.classList.add('opacity-0');
+
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                    zoomCard.style.transform = '';
+                    zoomCard.style.opacity = '1';
+                    isZoomOpen = false;
+                    const statusEl = document.getElementById('footer-item-status');
+                    if (statusEl) statusEl.textContent = 'SCANNING SECTOR...';
+                    if (callbackAfterClose) callbackAfterClose();
+                }, 460);
+            }
+
+            function startItemHoldTimer() {
+                clearInterval(itemHoldInterval);
+                itemElapsedMs = 0;
+                currentHoldTargetMs = config.itemDurationMs;
+
+                const progressBar = document.getElementById('zoom-item-progress');
+                if (progressBar) progressBar.style.width = '0%';
+
+                const tickMs = 100;
+                itemHoldInterval = setInterval(() => {
+                    if (!isPlaying || !isZoomOpen) return;
+
+                    const activeVideo = document.getElementById('active-zoom-video');
+                    if (activeVideo && !activeVideo.paused && activeVideo.duration > 0 && !isNaN(activeVideo.duration)) {
+                        currentHoldTargetMs = Math.min(35000, Math.max(4000, activeVideo.duration * 1000));
+                        itemElapsedMs = activeVideo.currentTime * 1000;
+
+                        if (activeVideo.ended || activeVideo.currentTime >= activeVideo.duration - 0.25) {
+                            advanceToNextFeedInTour();
+                            return;
+                        }
+                    } else {
+                        itemElapsedMs += tickMs;
+                        if (itemElapsedMs >= currentHoldTargetMs) {
+                            advanceToNextFeedInTour();
+                            return;
+                        }
+                    }
+
+                    const pct = Math.min(100, (itemElapsedMs / currentHoldTargetMs) * 100);
+                    if (progressBar) progressBar.style.width = `${pct}%`;
+                    updateRuntimeHUD();
+                }, tickMs);
+            }
+
+            function advanceToNextFeedInTour() {
+                const list = getFlattenedPlaylist();
+                const currentFlat = getCurrentFlatIndex();
+                const nextFlat = (currentFlat + 1) % list.length;
+                const nextEntry = list[nextFlat];
+
+                closeCctvZoom(false, () => {
+                    if (!isPlaying) return;
+
+                    if (nextEntry.chapterIdx !== currentChapterIdx) {
+                        renderChapter(nextEntry.chapterIdx);
+                        scheduleNextItemZoom(nextEntry.chapterIdx, nextEntry.itemIdx, 1100);
+                    } else {
+                        scheduleNextItemZoom(nextEntry.chapterIdx, nextEntry.itemIdx, 550);
+                    }
+                });
+            }
+
+            function scheduleNextItemZoom(chapterIdx, itemIdx, delayMs = 650) {
+                clearTimeout(startTransitionTimeout);
+                document.querySelectorAll('.cctv-locked').forEach(el => el.classList.remove('cctv-locked'));
+                const targetCard = document.getElementById(`media-card-${chapterIdx}-${itemIdx}`);
+                if (targetCard) {
+                    targetCard.classList.add('cctv-locked');
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+                const statusEl = document.getElementById('footer-item-status');
+                if (statusEl) statusEl.textContent = 'LOCKING SIGNAL...';
+
+                startTransitionTimeout = setTimeout(() => {
+                    if (!isPlaying) return;
+                    openCctvZoom(chapterIdx, itemIdx, false);
+                }, delayMs);
+            }
+
+            // ===================================================================
+            // MANUAL & KEYBOARD NAVIGATION CONTROLS
+            // ===================================================================
+            function nextMediaItem() {
+                spyAudio.playBlip(740, 0.06);
+                const list = getFlattenedPlaylist();
+                const nextFlat = (getCurrentFlatIndex() + 1) % list.length;
+                const nextEntry = list[nextFlat];
+
+                if (isZoomOpen) {
+                    closeCctvZoom(false, () => {
+                        openCctvZoom(nextEntry.chapterIdx, nextEntry.itemIdx, true);
+                    });
+                } else {
+                    openCctvZoom(nextEntry.chapterIdx, nextEntry.itemIdx, true);
+                }
+            }
+
+            function prevMediaItem() {
+                spyAudio.playBlip(520, 0.06);
+                const list = getFlattenedPlaylist();
+                const prevFlat = (getCurrentFlatIndex() - 1 + list.length) % list.length;
+                const prevEntry = list[prevFlat];
+
+                if (isZoomOpen) {
+                    closeCctvZoom(false, () => {
+                        openCctvZoom(prevEntry.chapterIdx, prevEntry.itemIdx, true);
+                    });
+                } else {
+                    openCctvZoom(prevEntry.chapterIdx, prevEntry.itemIdx, true);
+                }
+            }
+
+            function jumpToChapter(chapterIdx) {
+                spyAudio.playBlip(660, 0.06);
+                clearTimeout(startTransitionTimeout);
+                clearInterval(itemHoldInterval);
+
+                const performJump = () => {
+                    currentItemIdxInChapter = 0;
+                    itemElapsedMs = 0;
+                    renderChapter(chapterIdx);
+                    if (isPlaying) {
+                        scheduleNextItemZoom(chapterIdx, 0, 900);
+                    }
+                };
+
+                if (isZoomOpen) {
+                    closeCctvZoom(false, performJump);
+                } else {
+                    performJump();
+                }
+            }
+
+            function nextChapter() {
+                jumpToChapter((currentChapterIdx + 1) % config.chapters.length);
+            }
+
+            function prevChapter() {
+                jumpToChapter((currentChapterIdx - 1 + config.chapters.length) % config.chapters.length);
+            }
+
+            function togglePlayPause() {
+                isPlaying = !isPlaying;
+                const icon = document.getElementById('icon-play-pause');
+                const label = document.getElementById('label-play-pause');
+                const btn = document.getElementById('btn-play-pause');
+
+                if (isPlaying) {
+                    if (icon) icon.setAttribute('data-lucide', 'pause');
+                    if (label) label.textContent = 'CCTV AUTO-TOUR ON';
+                    if (btn) {
+                        btn.classList.remove('bg-slate-800', 'text-white');
+                        btn.classList.add('bg-emerald-400', 'text-slate-950');
+                    }
+                    spyAudio.playBlip(880, 0.08);
+
+                    if (!isZoomOpen) {
+                        scheduleNextItemZoom(currentChapterIdx, currentItemIdxInChapter, 500);
+                    }
+                } else {
+                    if (icon) icon.setAttribute('data-lucide', 'play');
+                    if (label) label.textContent = 'PAUSED (MANUAL)';
+                    if (btn) {
+                        btn.classList.remove('bg-emerald-400', 'text-slate-950');
+                        btn.classList.add('bg-slate-800', 'text-white');
+                    }
+                    spyAudio.playBlip(440, 0.08);
+                    clearTimeout(startTransitionTimeout);
+                }
+                if (window.lucide) window.lucide.createIcons();
+            }
+
+            function fireCelebrationConfetti() {
+                if (typeof window.confetti === 'function') {
+                    window.confetti({
+                        particleCount: 95,
+                        spread: 80,
+                        origin: { y: 0.6 },
+                        colors: ['#00ff88', '#06b6d4', '#c084fc', '#ff4d6d']
+                    });
+                }
+            }
+
+            // ===================================================================
+            // LIVE MEDIA CUSTOMIZER DRAWER & BATCH UPLOAD
+            // ===================================================================
+            function toggleEditorDrawer(open) {
+                const drawer = document.getElementById('editor-drawer');
+                if (!drawer) return;
+
+                if (open) {
+                    if (isPlaying) togglePlayPause();
+                    if (isZoomOpen) closeCctvZoom(false);
+                    buildEditorDrawer();
+                    drawer.classList.remove('hidden');
+                } else {
+                    drawer.classList.add('hidden');
+                    const appEl = document.getElementById('presentation-app');
+                    if (appEl && !appEl.classList.contains('hidden')) {
+                        renderChapter(currentChapterIdx);
+                    }
+                }
+            }
+
+            function buildEditorDrawer() {
+                const container = document.getElementById('media-slots-editor');
+                if (!container) return;
+
+                const playlist = getFlattenedPlaylist();
+                const loadedCount = playlist.filter(p => p.item.src && p.item.src.trim() !== '').length;
+
+                const countBadge = document.getElementById('editor-loaded-count');
+                if (countBadge) {
+                    countBadge.textContent = `${loadedCount} / ${playlist.length} LOADED`;
+                }
+
+                container.innerHTML = config.chapters.map((ch, cIdx) => {
+                    const slotsHTML = ch.items.map((item, iIdx) => {
+                        const hasFile = item.src && item.src.trim() !== '';
+                        return `
+                            <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5 space-y-2.5">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="font-mono text-xs font-bold text-slate-200">${item.label}</span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono ${hasFile ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400'}">
+                                            ${hasFile ? (item.type === 'video' ? 'VIDEO ✓' : 'PHOTO ✓') : 'EMPTY'}
+                                        </span>
+                                        ${ch.items.length > 1 ? `
+                                            <button type="button" onclick="window.removeMediaSlot(${cIdx}, ${iIdx})" title="Delete Slot" class="p-1 rounded bg-slate-800 hover:bg-rose-500/30 text-slate-400 hover:text-rose-400 cursor-pointer">
+                                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row gap-2">
+                                    <label class="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-mono text-xs cursor-pointer transition-all">
+                                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                                        <span>Upload Photo / Video</span>
+                                        <input type="file" accept="image/*,video/*" class="hidden" onchange="window.handleSingleUpload(event, ${cIdx}, ${iIdx})">
+                                    </label>
+                                    ${hasFile ? `
+                                        <button type="button" onclick="window.clearMediaSlot(${cIdx}, ${iIdx})" class="px-3 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 font-mono text-xs cursor-pointer">
+                                            Clear
+                                        </button>
+                                    ` : ''}
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                    <input type="text" value="${item.tag}" placeholder="Badge Tag" oninput="window.updateMediaMeta(${cIdx}, ${iIdx}, 'tag', this.value)" class="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-emerald-300 focus:border-emerald-500 focus:outline-none">
+                                    <input type="text" value="${item.caption}" placeholder="Caption" oninput="window.updateMediaMeta(${cIdx}, ${iIdx}, 'caption', this.value)" class="sm:col-span-2 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:border-emerald-500 focus:outline-none">
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    return `
+                        <div class="space-y-2.5 pt-2">
+                            <div class="flex items-center justify-between px-1">
+                                <span class="font-mono text-xs font-bold text-emerald-400">${ch.shortTitle} — ${ch.title} ${ch.highlight}</span>
+                                <button type="button" onclick="window.addNewCustomSlot(${cIdx})" class="font-mono text-[11px] text-purple-400 hover:underline cursor-pointer">+ Add Slot</button>
+                            </div>
+                            ${slotsHTML}
+                        </div>
+                    `;
+                }).join('');
+
+                if (window.lucide) window.lucide.createIcons();
+                updateRuntimeHUD();
+            }
+
+            function triggerQuickUpload(chapterIdx, itemIdx) {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*,video/*';
+                input.onchange = (e) => handleSingleUpload(e, chapterIdx, itemIdx);
+                input.click();
+            }
+
+            function handleSingleUpload(event, chapterIdx, itemIdx) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const objectUrl = URL.createObjectURL(file);
+                const isVideo = file.type.startsWith('video/');
+
+                const item = config.chapters[chapterIdx].items[itemIdx];
+                item.src = objectUrl;
+                item.type = isVideo ? 'video' : 'image';
+
+                showToast(`Loaded ${file.name} into ${item.tag}`);
+                buildEditorDrawer();
+
+                const appEl = document.getElementById('presentation-app');
+                if (appEl && !appEl.classList.contains('hidden')) {
+                    renderChapter(currentChapterIdx);
+                    if (isZoomOpen) {
+                        openCctvZoom(chapterIdx, itemIdx, false);
+                    }
+                }
+            }
+
+            function handleBatchUpload(event) {
+                const files = Array.from(event.target.files || []);
+                if (!files.length) return;
+
+                let fileIdx = 0;
+                for (let c = 0; c < config.chapters.length && fileIdx < files.length; c++) {
+                    for (let i = 0; i < config.chapters[c].items.length && fileIdx < files.length; i++) {
+                        const slot = config.chapters[c].items[i];
+                        if (!slot.src || slot.src.trim() === '') {
+                            const file = files[fileIdx++];
+                            slot.src = URL.createObjectURL(file);
+                            slot.type = file.type.startsWith('video/') ? 'video' : 'image';
+                        }
+                    }
+                }
+
+                while (fileIdx < files.length) {
+                    const file = files[fileIdx++];
+                    const targetCh = config.chapters[7];
+                    targetCh.items.push({
+                        id: `extra_${Date.now()}_${fileIdx}`,
+                        label: `Extra Feed: ${file.name}`,
+                        src: URL.createObjectURL(file),
+                        type: file.type.startsWith('video/') ? 'video' : 'image',
+                        aspect: '16:9 Wide',
+                        tag: `BONUS_${fileIdx}`,
+                        caption: file.name.replace(/\.[^/.]+$/, '')
+                    });
+                }
+
+                showToast(`Batch loaded ${files.length} files across your dossier!`);
+                buildEditorDrawer();
+            }
+
+            function handleBgmUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const audioUrl = URL.createObjectURL(file);
+                spyAudio.loadCustomTrack(audioUrl, file.name);
+
+                const badge = document.getElementById('editor-bgm-badge');
+                const resetBtn = document.getElementById('btn-reset-bgm');
+                if (badge) badge.textContent = `CUSTOM: ${file.name}`;
+                if (resetBtn) resetBtn.classList.remove('hidden');
+
+                showToast(`Soundtrack loaded: ${file.name}`);
+            }
+
+            function resetBgmToSynth() {
+                spyAudio.clearCustomTrack();
+                const badge = document.getElementById('editor-bgm-badge');
+                const resetBtn = document.getElementById('btn-reset-bgm');
+                if (badge) badge.textContent = 'BUILT-IN SPY SYNTH';
+                if (resetBtn) resetBtn.classList.add('hidden');
+                showToast('Switched back to Built-In Spy Synth Groove');
+            }
+
+            function addNewCustomSlot(chapterIdx = 0) {
+                const ch = config.chapters[chapterIdx];
+                const num = ch.items.length + 1;
+                ch.items.push({
+                    id: `${ch.id}_custom_${Date.now()}`,
+                    label: `${ch.shortTitle}: Extra Feed #${num}`,
+                    src: "",
+                    type: "image",
+                    aspect: "4:3 Frame",
+                    tag: `EXTRA_0${num}`,
+                    caption: "Another iconic BSIT moment caught on surveillance"
+                });
+                buildEditorDrawer();
+                showToast(`Added extra feed slot to ${ch.shortTitle}`);
+            }
+
+            function removeMediaSlot(chapterIdx, itemIdx) {
+                config.chapters[chapterIdx].items.splice(itemIdx, 1);
+                buildEditorDrawer();
+                showToast('Slot removed');
+            }
+
+            function clearMediaSlot(chapterIdx, itemIdx) {
+                config.chapters[chapterIdx].items[itemIdx].src = '';
+                buildEditorDrawer();
+                showToast('Slot cleared');
+            }
+
+            function updateMediaMeta(chapterIdx, itemIdx, field, value) {
+                config.chapters[chapterIdx].items[itemIdx][field] = value;
+            }
+
+            function updateConfigText(field, value) {
+                config[field] = value;
+                syncIdentityLabels();
+            }
+
+            function copyConfigJson() {
+                const exportData = JSON.stringify(config, null, 2);
+                const temp = document.createElement('textarea');
+                temp.value = exportData;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                showToast('Dossier JSON configuration copied to clipboard!');
+            }
+
+            function resetToPlaceholders() {
+                config = JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG));
+                syncIdentityLabels();
+                buildEditorDrawer();
+                showToast('All 40 slots reset to default placeholders');
+            }
+
+            // ===================================================================
+            // UTILITIES: FULLSCREEN, KEYBOARD & TOASTS
+            // ===================================================================
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                    document.exitFullscreen().catch(() => {});
+                }
+            }
+
+            function setupKeyboardShortcuts() {
+                window.addEventListener('keydown', (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+
+                    if (e.key === 'ArrowRight') nextMediaItem();
+                    if (e.key === 'ArrowLeft') prevMediaItem();
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        nextChapter();
+                    }
+                    if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        prevChapter();
+                    }
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        togglePlayPause();
+                    }
+                    if (e.key === 'Escape') {
+                        const drawer = document.getElementById('editor-drawer');
+                        if (drawer && !drawer.classList.contains('hidden')) {
+                            toggleEditorDrawer(false);
+                        } else if (isZoomOpen) {
+                            closeCctvZoom(true);
+                        }
+                    }
+                    if (e.key.toLowerCase() === 'f') toggleFullscreen();
+                    if (e.key.toLowerCase() === 'm') spyAudio.toggleMute();
+                });
+            }
+
+            function showToast(msg) {
+                const box = document.getElementById('toast-box');
+                const msgEl = document.getElementById('toast-msg');
+                if (!box || !msgEl) return;
+
+                msgEl.textContent = msg;
+                box.classList.remove('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    box.classList.add('opacity-0', 'translate-y-2');
+                }, 2600);
+            }
+
+            // ===================================================================
+            // EXPOSE ALL HANDLERS CLEANLY ON WINDOW
+            // ===================================================================
+            window.spyAudio = spyAudio;
+            window.startDecryption = startDecryption;
+            window.toggleEditorDrawer = toggleEditorDrawer;
+            window.changePace = changePace;
+            window.openCctvZoom = openCctvZoom;
+            window.closeCctvZoom = closeCctvZoom;
+            window.nextMediaItem = nextMediaItem;
+            window.prevMediaItem = prevMediaItem;
+            window.jumpToChapter = jumpToChapter;
+            window.nextChapter = nextChapter;
+            window.prevChapter = prevChapter;
+            window.togglePlayPause = togglePlayPause;
+            window.fireCelebrationConfetti = fireCelebrationConfetti;
+            window.triggerQuickUpload = triggerQuickUpload;
+            window.handleSingleUpload = handleSingleUpload;
+            window.handleBatchUpload = handleBatchUpload;
+            window.handleBgmUpload = handleBgmUpload;
+            window.resetBgmToSynth = resetBgmToSynth;
+            window.addNewCustomSlot = addNewCustomSlot;
+            window.removeMediaSlot = removeMediaSlot;
+            window.clearMediaSlot = clearMediaSlot;
+            window.updateMediaMeta = updateMediaMeta;
+            window.updateConfigText = updateConfigText;
+            window.copyConfigJson = copyConfigJson;
+            window.resetToPlaceholders = resetToPlaceholders;
+            window.toggleFullscreen = toggleFullscreen;
+
+            // Initialize on DOM ready
+            function initApp() {
+                if (window.lucide) window.lucide.createIcons();
+                syncIdentityLabels();
+                if (config.bgmSrc && config.bgmSrc.trim() !== '') {
+                    spyAudio.loadCustomTrack(config.bgmSrc, config.bgmTitle || 'CUSTOM BGM');
+                }
+                buildEditorDrawer();
+                setupKeyboardShortcuts();
+                updateRuntimeHUD();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initApp);
+            } else {
+                initApp();
+            }
+        })();
+    </script>
+</body>
+</html>
