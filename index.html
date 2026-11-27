@@ -222,7 +222,7 @@
             <div id="terminal-log" class="bg-black/60 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-emerald-400/90 space-y-1.5 mb-4 h-32 overflow-y-auto">
                 <div>> Establishing secure connection to BSIT Lecture Room... [OK]</div>
                 <div>> Bypassing firewall: "Just_A_Normal_Lecture.pptx"... [SUCCESS]</div>
-                <div>> Loading 10 Classified Chapters (40 Surveillance Feeds // 5:40+ Runtime)... [READY]</div>
+                <div>> Loading 10 Classified Chapters (40 Surveillance Feeds)... [READY]</div>
                 <div class="text-purple-400 animate-pulse">> Awaiting manual decryption trigger...</div>
             </div>
 
@@ -268,7 +268,7 @@
                 </div>
                 <div class="hidden xl:flex flex-col">
                     <span class="font-mono text-[11px] text-emerald-400 font-bold leading-none" id="hud-agent-name">AGENT MODERATOR</span>
-                    <span class="font-mono text-[10px] text-slate-400 leading-tight" id="hud-runtime-display">RUNTIME: 00:00 / 05:40</span>
+                    <span class="font-mono text-[10px] text-slate-400 leading-tight" id="hud-runtime-display">RUNTIME: 00:00 / 02:40</span>
                 </div>
             </div>
 
@@ -280,9 +280,10 @@
             <!-- Right HUD Controls (Pace, Audio, Fullscreen, Secret Editor Gear) -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <select id="pace-selector" onchange="window.changePace(this.value)" title="Presentation Pace / Duration" class="hidden md:block px-2.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 font-mono text-[11px] text-purple-300 focus:outline-none focus:border-emerald-500 cursor-pointer">
+                    <option value="4000" selected>PACE: SNAPPY (4.0s)</option>
+                    <option value="6000">PACE: BALANCED (6.0s)</option>
                     <option value="8500">PACE: 5.5 MIN (8.5s)</option>
                     <option value="10500">PACE: 7.0 MIN (10.5s)</option>
-                    <option value="5000">PACE: FAST PREVIEW (5.0s)</option>
                 </select>
 
                 <!-- BGM / Audio Control Pill with Live Equalizer & Volume Slider -->
@@ -357,7 +358,7 @@
             </div>
 
             <div class="hidden md:flex items-center gap-3 font-mono text-xs text-slate-400">
-                <span id="footer-time-remaining" class="text-emerald-400">REM: 05:40</span>
+                <span id="footer-time-remaining" class="text-emerald-400">REM: 02:40</span>
                 <span>|</span>
                 <span>FEED <strong id="slide-counter" class="text-white">01 / 40</strong></span>
             </div>
@@ -483,12 +484,12 @@
                     <div class="px-3 py-2 rounded-xl bg-slate-950/80 border border-emerald-500/25 flex items-center justify-between font-mono text-[11px]">
                         <span id="editor-vault-status" class="text-emerald-400 flex items-center gap-1.5">
                             <i data-lucide="hard-drive" class="w-3.5 h-3.5"></i>
-                            <span>VAULT SYNCED: 0/40 FEEDS (0.0 MB)</span>
+                            <span>REPO CONFIG ACTIVE // 0 LOCAL OVERRIDES</span>
                         </span>
-                        <span class="text-slate-400 text-[10px]">SURVIVES RELOADS</span>
+                        <span class="text-slate-400 text-[10px]">INDEXEDDB OVERRIDE</span>
                     </div>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Select multiple photos and videos at once! Every file is automatically stored in your browser's IndexedDB vault so accidental refreshes never erase your work.
+                        Test-upload your photos & videos here! When ready for cross-device GitHub Pages hosting, place those files inside your <code class="text-emerald-300">media/</code> folder and click <strong>COPY GITHUB CONFIG</strong> below.
                     </p>
                     <label class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm cursor-pointer transition-all shadow-lg">
                         <i data-lucide="folder-up" class="w-5 h-5"></i>
@@ -512,10 +513,10 @@
                     </div>
                     <div>
                         <div class="flex justify-between font-mono text-[11px] text-slate-400 mb-1">
-                            <span>CCTV Zoom Hold Duration (Per Feed)</span>
-                            <span id="editor-duration-label" class="text-emerald-400">8.5s (~5:40 Total)</span>
+                            <span>CCTV Zoom Hold Duration (Per Image)</span>
+                            <span id="editor-duration-label" class="text-emerald-400">4.0s (~02:40 Base)</span>
                         </div>
-                        <input id="editor-duration-slider" type="range" min="4000" max="15000" step="500" value="8500" oninput="window.changePace(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400">
+                        <input id="editor-duration-slider" type="range" min="2000" max="15000" step="500" value="4000" oninput="window.changePace(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400">
                     </div>
                     <div>
                         <label class="block text-xs font-mono text-slate-400 mb-1">Finale Tribute Message (Chapter 10)</label>
@@ -574,7 +575,7 @@
                             <span>COPY GITHUB CONFIG</span>
                         </button>
                         <button id="btn-reset-vault" type="button" onclick="window.handleResetVaultClick()" class="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-400 font-mono text-xs cursor-pointer">
-                            Clear Vault / Reset
+                            Reset to Repo Config
                         </button>
                     </div>
                 </div>
@@ -607,179 +608,201 @@
     </div>
 
     <!-- =====================================================================
-         5. COMPLETE APPLICATION JAVASCRIPT (CLEAN, SELF-CONTAINED, ERROR-FREE)
+         5. COMPLETE APPLICATION JAVASCRIPT
+         >>> EDIT DEFAULT_DOSSIER_CONFIG RIGHT BELOW FOR CROSS-DEVICE HOSTING <<<
     ====================================================================== -->
     <script>
+        /* =========================================================================
+         *  HOW TO MAKE ALL PHOTOS, VIDEOS & MUSIC WORK ON EVERY DEVICE (GITHUB):
+         *  1. Create a folder named `media` next to this `index.html` file.
+         *  2. Put your photos, videos, and optional `bgm.mp3` inside `media/`.
+         *  3. Relative `./media/...` paths work on VS Code Live Server AND GitHub!
+         * ========================================================================= */
+        const DEFAULT_DOSSIER_CONFIG = {
+            agentName: "SIR JOHN ROI JULAGTING",
+            codename: "AGENT RHUKUSH",
+            bgmSrc: "./media/bgm.mp3", // Place bgm.mp3 in ./media/ (auto-falls back to Spy Synth if missing)
+            bgmTitle: "CLASSIFIED BGM",
+            itemDurationMs: 4000, // 4.0 seconds per image (videos auto-play their full length up to 35s)
+            finaleMessage: "Thank you for being more than just our BSIT club moderator—thank you for hyping us up, keeping the vibes immaculate, mentoring us through every bug and deadline, and always showing up with unmatched style and warmth. We appreciate you so much!",
+            chapters: [
+                {
+                    id: "ch1",
+                    shortTitle: "CH 01: BRIEFING",
+                    code: "SECTOR 01 // SUBJECT PROFILE",
+                    title: "THE MAN,",
+                    highlight: "THE MYTH, THE ICON",
+                    accent: "emerald",
+                    layout: "hero-profile",
+                    items: [
+                        { id: "c1_1", label: "Hero Portrait", src: "./media/1.jpg", type: "image", aspect: "4:5 Portrait", tag: "CAM-01 // SUBJECT", caption: "BSIT Club Moderator — Reporting for duty with 10/10 aura." },
+                        { id: "c1_2", label: "Lecture Mode", src: "./media/2.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-02 // SERIOUS", caption: "When he switches to full Senior Dev / Professor mode." },
+                        { id: "c1_3", label: "Signature Smile", src: "./media/3.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-03 // WARMTH", caption: "The reassuring smile before a major BSIT defense." },
+                        { id: "c1_4", label: "Intro Clip", src: "./media/4.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-04 // INTRO", caption: "Caught on camera: Iconic entrance into the lecture hall." }
+                    ]
+                },
+                {
+                    id: "ch2",
+                    shortTitle: "CH 02: LECTURE",
+                    code: "SECTOR 02 // SERIOUS & MENTOR MODE",
+                    title: "MASTERMIND",
+                    highlight: "IN ACTION",
+                    accent: "cyan",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c2_1", label: "Whiteboard Strategy", src: "./media/5.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-05 // LOGIC", caption: "Explaining complex IT systems like it's effortless." },
+                        { id: "c2_2", label: "Deep Focus", src: "./media/6.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-06 // FOCUS", caption: "Analyzing student projects with laser precision." },
+                        { id: "c2_3", label: "Lecture Clip", src: "./media/7.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-07 // LECTURE", caption: "Live wisdom drop during a BSIT club session." },
+                        { id: "c2_4", label: "Code Review", src: "./media/8.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-08 // DEBUG", caption: "Finding the missing semicolon in 0.4 seconds." }
+                    ]
+                },
+                {
+                    id: "ch3",
+                    shortTitle: "CH 03: FASHION",
+                    code: "SECTOR 03 // RUNWAY SURVEILLANCE",
+                    title: "OUTFIT CHECK:",
+                    highlight: "MAIN CHARACTER DRIP",
+                    accent: "lavender",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c3_1", label: "Best OOTD #1", src: "./media/9.jpg", type: "image", aspect: "4:5 Portrait", tag: "CAM-09 // OOTD_01", caption: "Campus hallway? No, that's his personal Paris Fashion Week." },
+                        { id: "c3_2", label: "Best OOTD #2", src: "./media/10.jpg", type: "image", aspect: "4:5 Portrait", tag: "CAM-10 // OOTD_02", caption: "Color coordination level: Unmatched." },
+                        { id: "c3_3", label: "Outfit Transition Video", src: "./media/11.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-11 // RUNWAY", caption: "Serving looks between back-to-back lectures." },
+                        { id: "c3_4", label: "Accessories & Details", src: "./media/12.jpg", type: "image", aspect: "4:5 Portrait", tag: "CAM-12 // STYLE", caption: "Every angle approved by the BSIT fashion committee." }
+                    ]
+                },
+                {
+                    id: "ch4",
+                    shortTitle: "CH 04: GEN-Z",
+                    code: "SECTOR 04 // CULTURAL FLUENCY",
+                    title: "GEN-Z CODED",
+                    highlight: "NO CAP, FR FR",
+                    accent: "coral",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c4_1", label: "Iconic Pose", src: "./media/13.png", type: "image", aspect: "16:9 Wide", tag: "CAM-13 // SLAY", caption: "Understands every meme before the students even post it." },
+                        { id: "c4_2", label: "Gen-Z Reaction Clip", src: "./media/14.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-14 // VIBE", caption: "Passing the Gen-Z vibe check with flying colors." },
+                        { id: "c4_3", label: "Selfie Angle", src: "./media/15.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-15 // 0.5X", caption: "Mastering the 0.5x wide-angle camera like a natural." },
+                        { id: "c4_4", label: "Squad Pic", src: "./media/16.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-16 // BESTIE", caption: "Not just a moderator—an honorary member of the barkada." }
+                    ]
+                },
+                {
+                    id: "ch5",
+                    shortTitle: "CH 05: WHOLESOME",
+                    code: "SECTOR 05 // HEARTWARMING ARCHIVES",
+                    title: "PURE WARMTH &",
+                    highlight: "COMFORT VIBES",
+                    accent: "amber",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c5_1", label: "Candid Laugh", src: "./media/17.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-17 // LAUGH", caption: "Always making everyone feel heard, valued, and welcome." },
+                        { id: "c5_2", label: "Mentoring Moment", src: "./media/18.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-18 // MENTOR", caption: "Taking extra time to guide officers and members." },
+                        { id: "c5_3", label: "Wholesome Clip", src: "./media/19.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-19 // HEART", caption: "A wholesome moment caught on BSIT club cameras." },
+                        { id: "c5_4", label: "Club Group Photo", src: "./media/20.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-20 // FAMILY", caption: "The glue that holds the entire organization together." }
+                    ]
+                },
+                {
+                    id: "ch6",
+                    shortTitle: "CH 06: CHAOS",
+                    code: "SECTOR 06 // UNFILTERED BLOOPERS",
+                    title: "CAUGHT IN 4K:",
+                    highlight: "CHAOTIC & FUNNY",
+                    accent: "coral",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c6_1", label: "Funny Face #1", src: "./media/21.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-21 // 4K_01", caption: "Exhibit A: What happens when the camera shutter clicks too early." },
+                        { id: "c6_2", label: "Funny Clip #1", src: "./media/22.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-22 // BLOOPER", caption: "Leaked footage: Pure comedy gold during break time." },
+                        { id: "c6_3", label: "Reaction Meme", src: "./media/23.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-23 // MEME", caption: "POV: Someone says they forgot to push their code to GitHub." },
+                        { id: "c6_4", label: "Funny Clip #2", src: "./media/24.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-24 // CHAOS", caption: "Zero context needed—just legendary moderator energy." }
+                    ]
+                },
+                {
+                    id: "ch7",
+                    shortTitle: "CH 07: GRIND",
+                    code: "SECTOR 07 // CAFFEINE & CODE",
+                    title: "BEHIND THE",
+                    highlight: "SCENES GRIND",
+                    accent: "cyan",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c7_1", label: "Coffee Fuel", src: "./media/25.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-25 // COFFEE", caption: "Powered by iced coffee and pure dedication to BSIT." },
+                        { id: "c7_2", label: "Late Prep", src: "./media/26.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-26 // PREP", caption: "Reviewing event plans and presentations behind the scenes." },
+                        { id: "c7_3", label: "Desk Setup / Work Clip", src: "./media/27.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-27 // GRIND", caption: "Multitasking like an absolute pro." },
+                        { id: "c7_4", label: "Victory Stretch", src: "./media/28.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-28 // VICTORY", caption: "That feeling after a successful department activity." }
+                    ]
+                },
+                {
+                    id: "ch8",
+                    shortTitle: "CH 08: EVENTS",
+                    code: "SECTOR 08 // CAMPUS TAKEOVER",
+                    title: "BSIT EVENTS &",
+                    highlight: "HYPE SQUAD",
+                    accent: "lavender",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c8_1", label: "Event Stage / Host", src: "./media/29.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-29 // STAGE", caption: "Commanding the room at BSIT assemblies and seminars." },
+                        { id: "c8_2", label: "Event Hype Video", src: "./media/30.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-30 // HYPE", caption: "Cheering louder than anyone else for our BSIT reps!" },
+                        { id: "c8_3", label: "Backstage Candid", src: "./media/31.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-31 // BACKSTAGE", caption: "Keeping everyone calm and hyped before showtime." },
+                        { id: "c8_4", label: "Awarding / Celebration", src: "./media/32.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-32 // AWARD", caption: "Celebrating every milestone with the whole club." }
+                    ]
+                },
+                {
+                    id: "ch9",
+                    shortTitle: "CH 09: UNDERCOVER",
+                    code: "SECTOR 09 // SECRET PAPARAZZI",
+                    title: "UNDERCOVER",
+                    highlight: "CANDID ANGLES",
+                    accent: "emerald",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c9_1", label: "Hallway Walk", src: "./media/33.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-33 // HALL_A", caption: "Spotted on Campus CCTV: Looking iconic even off-guard." },
+                        { id: "c9_2", label: "Secret Video", src: "./media/34.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-34 // HIDDEN", caption: "He didn't even know we were recording this gem." },
+                        { id: "c9_3", label: "Side Profile", src: "./media/35.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-35 // PROFILE", caption: "Zero bad angles—scientifically proven by BSIT." },
+                        { id: "c9_4", label: "Candid Gesture", src: "./media/36.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-36 // SNAP", caption: "Every frame tells a story of kindness and humor." }
+                    ]
+                },
+                {
+                    id: "ch10",
+                    shortTitle: "CH 10: SALUTE",
+                    code: "SECTOR 10 // FINAL DECRYPTION",
+                    title: "FINAL",
+                    highlight: "AGENT SALUTE",
+                    accent: "emerald",
+                    layout: "grid-4",
+                    items: [
+                        { id: "c10_1", label: "Favorite Portrait", src: "./media/37.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-37 // LEGEND", caption: "To the coolest moderator in BSIT history." },
+                        { id: "c10_2", label: "Group Tribute Clip", src: "./media/38.mp4", type: "video", aspect: "16:9 Video", tag: "CAM-38 // SALUTE", caption: "A special shoutout from your BSIT family!" },
+                        { id: "c10_3", label: "Iconic Closing Shot", src: "./media/39.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-39 // ICON", caption: "We appreciate you today and always!" },
+                        { id: "c10_4", label: "Final Finale Tribute", src: "./media/40.jpg", type: "image", aspect: "16:9 Wide", tag: "CAM-40 // FINALE", caption: "BSIT Club Signing Off — Thank you for everything!" }
+                    ]
+                }
+            ]
+        };
+
         (function() {
             "use strict";
 
-            /**
-             * DEFAULT_DOSSIER_CONFIG
-             * 10 Classified Chapters x 4 Media Feeds = 40 Surveillance Slots.
-             * At 8.5s per feed, the automated CCTV tour lasts 5 minutes 40 seconds (+ transitions = ~6 mins).
-             */
-            const DEFAULT_DOSSIER_CONFIG = {
-                agentName: "SIR / COACH [NAME]",
-                codename: "AGENT DRIP // BSIT-01",
-                bgmSrc: "",
-                bgmTitle: "SPY SYNTH GROOVE",
-                itemDurationMs: 8500,
-                finaleMessage: "Thank you for being more than just our BSIT club moderator—thank you for hyping us up, keeping the vibes immaculate, mentoring us through every bug and deadline, and always showing up with unmatched style and warmth. We appreciate you so much!",
-                chapters: [
-                    {
-                        id: "ch1",
-                        shortTitle: "CH 01: BRIEFING",
-                        code: "SECTOR 01 // SUBJECT PROFILE",
-                        title: "THE MAN,",
-                        highlight: "THE MYTH, THE ICON",
-                        accent: "emerald",
-                        layout: "hero-profile",
-                        items: [
-                            { id: "c1_1", label: "Hero Portrait", src: "", type: "image", aspect: "4:5 Portrait", tag: "SUBJECT_01", caption: "BSIT Club Moderator — Reporting for duty with 10/10 aura." },
-                            { id: "c1_2", label: "Lecture Mode", src: "", type: "image", aspect: "16:9 Wide", tag: "SERIOUS_CAM", caption: "When he switches to full Senior Dev / Professor mode." },
-                            { id: "c1_3", label: "Signature Smile", src: "", type: "image", aspect: "16:9 Wide", tag: "WARMTH_99%", caption: "The reassuring smile before a major BSIT defense." },
-                            { id: "c1_4", label: "Intro Clip", src: "", type: "video", aspect: "16:9 Video", tag: "INTRO_CLIP", caption: "Caught on camera: Iconic entrance into the lecture hall." }
-                        ]
-                    },
-                    {
-                        id: "ch2",
-                        shortTitle: "CH 02: LECTURE",
-                        code: "SECTOR 02 // SERIOUS & MENTOR MODE",
-                        title: "MASTERMIND",
-                        highlight: "IN ACTION",
-                        accent: "cyan",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c2_1", label: "Whiteboard Strategy", src: "", type: "image", aspect: "16:9 Wide", tag: "LOGIC_MAX", caption: "Explaining complex IT systems like it's effortless." },
-                            { id: "c2_2", label: "Deep Focus", src: "", type: "image", aspect: "16:9 Wide", tag: "FOCUS_LOCK", caption: "Analyzing student projects with laser precision." },
-                            { id: "c2_3", label: "Lecture Clip", src: "", type: "video", aspect: "16:9 Video", tag: "LECTURE_VID", caption: "Live wisdom drop during a BSIT club session." },
-                            { id: "c2_4", label: "Code Review", src: "", type: "image", aspect: "16:9 Wide", tag: "DEBUG_PRO", caption: "Finding the missing semicolon in 0.4 seconds." }
-                        ]
-                    },
-                    {
-                        id: "ch3",
-                        shortTitle: "CH 03: FASHION",
-                        code: "SECTOR 03 // RUNWAY SURVEILLANCE",
-                        title: "OUTFIT CHECK:",
-                        highlight: "MAIN CHARACTER DRIP",
-                        accent: "lavender",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c3_1", label: "Best OOTD #1", src: "", type: "image", aspect: "4:5 Portrait", tag: "FIT_CHECK_01", caption: "Campus hallway? No, that's his personal Paris Fashion Week." },
-                            { id: "c3_2", label: "Best OOTD #2", src: "", type: "image", aspect: "4:5 Portrait", tag: "FIT_CHECK_02", caption: "Color coordination level: Unmatched." },
-                            { id: "c3_3", label: "Outfit Transition Video", src: "", type: "video", aspect: "16:9 Video", tag: "DRIP_MOTION", caption: "Serving looks between back-to-back lectures." },
-                            { id: "c3_4", label: "Accessories & Details", src: "", type: "image", aspect: "4:5 Portrait", tag: "AESTHETIC_100", caption: "Every angle approved by the BSIT fashion committee." }
-                        ]
-                    },
-                    {
-                        id: "ch4",
-                        shortTitle: "CH 04: GEN-Z",
-                        code: "SECTOR 04 // CULTURAL FLUENCY",
-                        title: "GEN-Z CODED",
-                        highlight: "NO CAP, FR FR",
-                        accent: "coral",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c4_1", label: "Iconic Pose", src: "", type: "image", aspect: "16:9 Wide", tag: "SLAY_DETECTED", caption: "Understands every meme before the students even post it." },
-                            { id: "c4_2", label: "Gen-Z Reaction Clip", src: "", type: "video", aspect: "16:9 Video", tag: "VIBE_CHECK", caption: "Passing the Gen-Z vibe check with flying colors." },
-                            { id: "c4_3", label: "Selfie Angle", src: "", type: "image", aspect: "16:9 Wide", tag: "0.5X_LENS", caption: "Mastering the 0.5x wide-angle camera like a natural." },
-                            { id: "c4_4", label: "Squad Pic", src: "", type: "image", aspect: "16:9 Wide", tag: "BESTIE_ERA", caption: "Not just a moderator—an honorary member of the barkada." }
-                        ]
-                    },
-                    {
-                        id: "ch5",
-                        shortTitle: "CH 05: WHOLESOME",
-                        code: "SECTOR 05 // HEARTWARMING ARCHIVES",
-                        title: "PURE WARMTH &",
-                        highlight: "COMFORT VIBES",
-                        accent: "amber",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c5_1", label: "Candid Laugh", src: "", type: "image", aspect: "16:9 Wide", tag: "CORE_MEM_01", caption: "Always making everyone feel heard, valued, and welcome." },
-                            { id: "c5_2", label: "Mentoring Moment", src: "", type: "image", aspect: "16:9 Wide", tag: "CORE_MEM_02", caption: "Taking extra time to guide officers and members." },
-                            { id: "c5_3", label: "Wholesome Clip", src: "", type: "video", aspect: "16:9 Video", tag: "HEART_100%", caption: "A wholesome moment caught on BSIT club cameras." },
-                            { id: "c5_4", label: "Club Group Photo", src: "", type: "image", aspect: "16:9 Wide", tag: "BSIT_FAM", caption: "The glue that holds the entire organization together." }
-                        ]
-                    },
-                    {
-                        id: "ch6",
-                        shortTitle: "CH 06: CHAOS",
-                        code: "SECTOR 06 // UNFILTERED BLOOPERS",
-                        title: "CAUGHT IN 4K:",
-                        highlight: "CHAOTIC & FUNNY",
-                        accent: "coral",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c6_1", label: "Funny Face #1", src: "", type: "image", aspect: "16:9 Wide", tag: "EVIDENCE_01", caption: "Exhibit A: What happens when the camera shutter clicks too early." },
-                            { id: "c6_2", label: "Funny Clip #1", src: "", type: "video", aspect: "16:9 Video", tag: "BLOOPER_CAM", caption: "Leaked footage: Pure comedy gold during break time." },
-                            { id: "c6_3", label: "Reaction Meme", src: "", type: "image", aspect: "16:9 Wide", tag: "MEME_GOLD", caption: "POV: Someone says they forgot to push their code to GitHub." },
-                            { id: "c6_4", label: "Funny Clip #2", src: "", type: "video", aspect: "16:9 Video", tag: "UNSCRIPTED", caption: "Zero context needed—just legendary moderator energy." }
-                        ]
-                    },
-                    {
-                        id: "ch7",
-                        shortTitle: "CH 07: GRIND",
-                        code: "SECTOR 07 // CAFFEINE & CODE",
-                        title: "BEHIND THE",
-                        highlight: "SCENES GRIND",
-                        accent: "cyan",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c7_1", label: "Coffee Fuel", src: "", type: "image", aspect: "16:9 Wide", tag: "CAFFEINE_OP", caption: "Powered by iced coffee and pure dedication to BSIT." },
-                            { id: "c7_2", label: "Late Prep", src: "", type: "image", aspect: "16:9 Wide", tag: "OVERTIME", caption: "Reviewing event plans and presentations behind the scenes." },
-                            { id: "c7_3", label: "Desk Setup / Work Clip", src: "", type: "video", aspect: "16:9 Video", tag: "GRIND_MODE", caption: "Multitasking like an absolute pro." },
-                            { id: "c7_4", label: "Victory Stretch", src: "", type: "image", aspect: "16:9 Wide", tag: "MISSION_DONE", caption: "That feeling after a successful department activity." }
-                        ]
-                    },
-                    {
-                        id: "ch8",
-                        shortTitle: "CH 08: EVENTS",
-                        code: "SECTOR 08 // CAMPUS TAKEOVER",
-                        title: "BSIT EVENTS &",
-                        highlight: "HYPE SQUAD",
-                        accent: "lavender",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c8_1", label: "Event Stage / Host", src: "", type: "image", aspect: "16:9 Wide", tag: "STAGE_PRESENCE", caption: "Commanding the room at BSIT assemblies and seminars." },
-                            { id: "c8_2", label: "Event Hype Video", src: "", type: "video", aspect: "16:9 Video", tag: "HYPE_REEL", caption: "Cheering louder than anyone else for our BSIT reps!" },
-                            { id: "c8_3", label: "Backstage Candid", src: "", type: "image", aspect: "16:9 Wide", tag: "BACKSTAGE", caption: "Keeping everyone calm and hyped before showtime." },
-                            { id: "c8_4", label: "Awarding / Celebration", src: "", type: "image", aspect: "16:9 Wide", tag: "CHAMPION_VIBE", caption: "Celebrating every milestone with the whole club." }
-                        ]
-                    },
-                    {
-                        id: "ch9",
-                        shortTitle: "CH 09: UNDERCOVER",
-                        code: "SECTOR 09 // SECRET PAPARAZZI",
-                        title: "UNDERCOVER",
-                        highlight: "CANDID ANGLES",
-                        accent: "emerald",
-                        layout: "grid-4",
-                        items: [
-                            { id: "c9_1", label: "Hallway Walk", src: "", type: "image", aspect: "16:9 Wide", tag: "CCTV_HALL_A", caption: "Spotted on Campus CCTV: Looking iconic even off-guard." },
-                            { id: "c9_2", label: "Secret Video", src: "", type: "video", aspect: "16:9 Video", tag: "HIDDEN_CAM", caption: "He didn't even know we were recording this gem." },
-                            { id: "c9_3", label: "Side Profile", src: "", type: "image", aspect: "16:9 Wide", tag: "ANGLE_03", caption: "Zero bad angles—scientifically proven by BSIT." },
-                            { id: "c9_4", label: "Candid Gesture", src: "", type: "image", aspect: "16:9 Wide", tag: "SNAPSHOT_09", caption: "Every frame tells a story of kindness and humor." }
-                        ]
-                    },
-                    {
-                        id: "ch10",
-                        shortTitle: "CH 10: SALUTE",
-                        code: "SECTOR 10 // FINAL DECRYPTION",
-                        title: "FINAL",
-                        highlight: "AGENT SALUTE",
-                        accent: "emerald",
-                        layout: "finale-3",
-                        items: [
-                            { id: "c10_1", label: "Favorite Portrait", src: "", type: "image", aspect: "16:9 Wide", tag: "LEGEND_01", caption: "To the coolest moderator in BSIT history." },
-                            { id: "c10_2", label: "Group Tribute Clip", src: "", type: "video", aspect: "16:9 Video", tag: "SALUTE_VID", caption: "A special shoutout from your BSIT family!" },
-                            { id: "c10_3", label: "Iconic Closing Shot", src: "", type: "image", aspect: "16:9 Wide", tag: "FOREVER_ICON", caption: "We appreciate you today and always!" }
-                        ]
-                    }
-                ]
-            };
+            // Auto-detect media type ('video' vs 'image') from file extension or MIME type
+            function resolveMediaType(src, explicitType = 'image') {
+                if (!src) return explicitType || 'image';
+                const cleanPath = src.split('?')[0].split('#')[0].toLowerCase();
+                if (/\.(mp4|webm|mov|m4v|ogv|ogg|mkv)$/i.test(cleanPath)) return 'video';
+                if (/\.(jpg|jpeg|png|gif|webp|avif|svg|bmp)$/i.test(cleanPath)) return 'image';
+                return explicitType || 'image';
+            }
 
-            // Application State
-            let config = JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG));
+            function normalizeConfigMediaTypes(cfgObj) {
+                if (!cfgObj || !Array.isArray(cfgObj.chapters)) return cfgObj;
+                cfgObj.chapters.forEach(ch => {
+                    ch.items.forEach(item => {
+                        item.type = resolveMediaType(item.src, item.type);
+                    });
+                });
+                return cfgObj;
+            }
+
+            // Application State (Initialized directly from hardcoded DEFAULT_DOSSIER_CONFIG)
+            let config = normalizeConfigMediaTypes(JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG)));
             let currentChapterIdx = 0;
             let currentItemIdxInChapter = 0;
             let isPlaying = true;
@@ -789,12 +812,12 @@
             let itemElapsedMs = 0;
             let currentHoldTargetMs = config.itemDurationMs;
             let isDrawerOpen = false;
-            let hasUnsavedOrVaultData = false;
+            let hasLocalBrowserEdits = false;
             let resetConfirmPending = false;
             let resetConfirmTimer = null;
 
             // ===================================================================
-            // INDEXEDDB PERSISTENT VAULT ENGINE ('BSIT_Classified_Vault_v1')
+            // INDEXEDDB OPTIONAL LOCAL OVERRIDE VAULT ('BSIT_Classified_Vault_v1')
             // ===================================================================
             class DossierVaultDB {
                 constructor() {
@@ -843,7 +866,7 @@
                                 updatedAt: Date.now()
                             });
                             tx.oncomplete = () => {
-                                hasUnsavedOrVaultData = true;
+                                hasLocalBrowserEdits = true;
                                 resolve();
                             };
                             tx.onerror = () => reject(tx.error);
@@ -866,7 +889,6 @@
                 async saveConfigState(cfgObj, audioSettings) {
                     try {
                         const db = await this.open();
-                        // Clone config without ephemeral blob: URLs so clean metadata persists
                         const cleanCfg = JSON.parse(JSON.stringify(cfgObj));
                         cleanCfg.chapters.forEach(ch => {
                             ch.items.forEach(item => {
@@ -888,7 +910,7 @@
                                 updatedAt: Date.now()
                             });
                             tx.oncomplete = () => {
-                                hasUnsavedOrVaultData = true;
+                                hasLocalBrowserEdits = true;
                                 resolve();
                             };
                             tx.onerror = () => resolve();
@@ -927,7 +949,7 @@
                             tx.objectStore('state').clear();
                             tx.objectStore('mediaBlobs').clear();
                             tx.oncomplete = () => {
-                                hasUnsavedOrVaultData = false;
+                                hasLocalBrowserEdits = false;
                                 resolve();
                             };
                             tx.onerror = () => resolve();
@@ -955,23 +977,27 @@
                 const { blobRecords } = await vaultDB.loadAll();
                 const playlist = getFlattenedPlaylist();
                 const loadedFeeds = playlist.filter(p => p.item.src && p.item.src.trim() !== '').length;
+                const repoFeeds = playlist.filter(p => p.item.src && !p.item.src.startsWith('blob:')).length;
                 const totalBytes = blobRecords.reduce((acc, r) => acc + (r.size || 0), 0);
                 const totalMB = (totalBytes / (1024 * 1024)).toFixed(1);
 
-                if (loadedFeeds > 0 || blobRecords.length > 0) {
-                    hasUnsavedOrVaultData = true;
-                }
-
                 const bootEl = document.getElementById('boot-vault-status');
                 if (bootEl) {
-                    bootEl.textContent = loadedFeeds > 0
-                        ? `VAULT RESTORED: ${loadedFeeds}/${playlist.length} FEEDS CACHED (${totalMB} MB)`
-                        : `VAULT READY: 0/${playlist.length} FEEDS (AUTO-SAVES UPLOADS)`;
+                    if (blobRecords.length > 0) {
+                        bootEl.textContent = `FEEDS: ${loadedFeeds}/${playlist.length} READY (${blobRecords.length} LOCAL OVERRIDES // ${totalMB} MB)`;
+                    } else if (repoFeeds > 0) {
+                        bootEl.textContent = `REPO CONFIG: ${repoFeeds}/${playlist.length} ./media/ FEEDS LINKED (CROSS-DEVICE READY)`;
+                    } else {
+                        bootEl.textContent = `READY: 0/${playlist.length} FEEDS (ADD TO ./media/ OR UPLOAD)`;
+                    }
                 }
 
                 const edEl = document.getElementById('editor-vault-status');
                 if (edEl) {
-                    edEl.innerHTML = `<i data-lucide="hard-drive" class="w-3.5 h-3.5"></i><span>VAULT SYNCED: ${loadedFeeds}/${playlist.length} FEEDS SAVED IN BROWSER (${totalMB} MB)</span>`;
+                    const label = blobRecords.length > 0
+                        ? `LOCAL OVERRIDE: ${blobRecords.length} FILES (${totalMB} MB) + ${repoFeeds} REPO FEEDS`
+                        : `REPO CONFIG ACTIVE: ${repoFeeds}/${playlist.length} ./media/ FEEDS LINKED`;
+                    edEl.innerHTML = `<i data-lucide="hard-drive" class="w-3.5 h-3.5"></i><span>${label}</span>`;
                     if (window.lucide) window.lucide.createIcons();
                 }
             }
@@ -1008,7 +1034,7 @@
                 const list = getFlattenedPlaylist();
                 const totalFeeds = Math.max(1, list.length);
                 const currentFlat = getCurrentFlatIndex();
-                const perItemSec = (config.itemDurationMs || 8500) / 1000;
+                const perItemSec = (config.itemDurationMs || 4000) / 1000;
                 const totalSec = totalFeeds * perItemSec;
                 const elapsedSec = (currentFlat * perItemSec) + (itemElapsedMs / 1000);
                 const remainingSec = Math.max(0, totalSec - elapsedSec);
@@ -1036,7 +1062,7 @@
             }
 
             // ===================================================================
-            // DUAL-MODE BACKGROUND MUSIC ENGINE WITH SMOOTH VIDEO AUTO-DUCKING
+            // DUAL-MODE BACKGROUND MUSIC ENGINE WITH GRACEFUL ./media/bgm.mp3 FALLBACK
             // ===================================================================
             class SpyAudioEngine {
                 constructor() {
@@ -1054,6 +1080,16 @@
                     this.bgmAudio.preload = 'auto';
                     this.hasCustomBgm = false;
                     this.trackName = 'SPY SYNTH';
+
+                    // Automatic graceful fallback to procedural Spy Synth if ./media/bgm.mp3 is absent
+                    this.bgmAudio.addEventListener('error', () => {
+                        if (this.hasCustomBgm) {
+                            this.hasCustomBgm = false;
+                            this.trackName = 'SPY SYNTH';
+                            this.startSpyGroove();
+                            this.updateAudioHUD();
+                        }
+                    });
 
                     this.bgInterval = null;
                     this.step = 0;
@@ -1120,7 +1156,8 @@
                     this.init();
                     this.bgmAudio.src = url;
                     this.hasCustomBgm = true;
-                    this.trackName = fileName.replace(/\.[^/.]+$/, '').toUpperCase();
+                    const cleanName = fileName.split('/').pop().replace(/\.[^/.]+$/, '').toUpperCase();
+                    this.trackName = cleanName || 'CUSTOM BGM';
                     this.bgmAudio.volume = this.isMuted ? 0 : this.baseVolume * (this.isDucked ? this.duckRatio : 1);
 
                     const appEl = document.getElementById('presentation-app');
@@ -1132,7 +1169,7 @@
 
                 clearCustomTrack() {
                     this.bgmAudio.pause();
-                    this.bgmAudio.src = '';
+                    this.bgmAudio.removeAttribute('src');
                     this.hasCustomBgm = false;
                     this.trackName = 'SPY SYNTH';
                     this.startSpyGroove();
@@ -1407,7 +1444,7 @@
             }
 
             function changePace(newMs) {
-                config.itemDurationMs = parseInt(newMs, 10) || 8500;
+                config.itemDurationMs = parseInt(newMs, 10) || 4000;
                 currentHoldTargetMs = config.itemDurationMs;
 
                 const paceSel = document.getElementById('pace-selector');
@@ -1420,33 +1457,69 @@
                 if (durSlider) durSlider.value = config.itemDurationMs;
                 if (durLabel) {
                     const totalSec = getFlattenedPlaylist().length * (config.itemDurationMs / 1000);
-                    durLabel.textContent = `${(config.itemDurationMs / 1000).toFixed(1)}s (~${formatSecondsToMMSS(totalSec)} Total)`;
+                    durLabel.textContent = `${(config.itemDurationMs / 1000).toFixed(1)}s (~${formatSecondsToMMSS(totalSec)} Base)`;
                 }
 
                 updateRuntimeHUD();
                 scheduleVaultStateSave();
-                showToast(`Pace updated: ${(config.itemDurationMs / 1000).toFixed(1)}s per feed`);
+                showToast(`Pace updated: ${(config.itemDurationMs / 1000).toFixed(1)}s per image`);
             }
 
             // ===================================================================
-            // MEDIA CARD RENDERER
+            // MEDIA CARD RENDERER (WITH GRACEFUL ONERROR FALLBACK)
             // ===================================================================
+            function renderStandbyPlaceholderInner(chapterIdx, itemIdx) {
+                const item = config.chapters[chapterIdx].items[itemIdx];
+                const isVideo = resolveMediaType(item.src, item.type) === 'video';
+                return `
+                    <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] text-emerald-400">
+                        ${item.tag}
+                    </div>
+                    <button type="button" onclick="event.stopPropagation(); window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" title="Upload Photo/Video Here" class="absolute top-2 right-2 px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-400 text-emerald-300 hover:text-slate-950 font-mono text-[10px] font-bold transition-all cursor-pointer z-20">
+                        + UPLOAD
+                    </button>
+
+                    <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 group-hover:bg-purple-500/20 border border-emerald-500/30 group-hover:border-purple-400 flex items-center justify-center text-emerald-400 group-hover:text-purple-300 mb-2 transition-transform group-hover:scale-110">
+                        <i data-lucide="${isVideo ? 'video' : 'camera'}" class="w-5 h-5"></i>
+                    </div>
+                    <span class="font-mono text-[11px] font-bold text-slate-200 group-hover:text-purple-300">
+                        ${isVideo ? 'VIDEO FEED STANDBY' : 'PHOTO FEED STANDBY'}
+                    </span>
+                    <span class="font-mono text-[10px] text-slate-500 mt-0.5 max-w-[200px] truncate">
+                        ${item.label}
+                    </span>
+
+                    <div class="absolute bottom-2 inset-x-2.5 px-2.5 py-1 rounded-xl bg-black/70 border border-slate-800/80">
+                        <p class="font-sans text-[11px] text-slate-300 truncate">"${item.caption}"</p>
+                    </div>
+                `;
+            }
+
+            function handleMediaLoadError(chapterIdx, itemIdx) {
+                const card = document.getElementById(`media-card-${chapterIdx}-${itemIdx}`);
+                if (!card) return;
+                card.className = "viewfinder group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/95 via-slate-950 to-slate-900 border border-dashed border-emerald-500/35 hover:border-purple-400 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center p-4 text-center h-full w-full";
+                card.innerHTML = renderStandbyPlaceholderInner(chapterIdx, itemIdx);
+                if (window.lucide) window.lucide.createIcons();
+            }
+
             function renderMediaCard(chapterIdx, itemIdx, extraClasses = '') {
                 const chapter = config.chapters[chapterIdx];
                 const item = chapter.items[itemIdx];
                 const hasMedia = item.src && item.src.trim() !== '';
+                const mediaType = resolveMediaType(item.src, item.type);
                 const cardDomId = `media-card-${chapterIdx}-${itemIdx}`;
 
                 if (hasMedia) {
-                    const mediaPreview = item.type === 'video'
-                        ? `<video src="${item.src}" class="w-full h-full object-cover" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>`
-                        : `<img src="${item.src}" alt="${item.label}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.style.display='none'">`;
+                    const mediaPreview = mediaType === 'video'
+                        ? `<video src="${item.src}" class="w-full h-full object-cover" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()" onerror="window.handleMediaLoadError(${chapterIdx}, ${itemIdx})"></video>`
+                        : `<img src="${item.src}" alt="${item.label}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="window.handleMediaLoadError(${chapterIdx}, ${itemIdx})">`;
 
                     return `
                         <div id="${cardDomId}" onclick="window.openCctvZoom(${chapterIdx}, ${itemIdx}, true)" title="Click for CCTV 400% Close-Up Zoom" class="viewfinder group relative overflow-hidden rounded-2xl bg-slate-950 border border-slate-700/80 hover:border-emerald-400 shadow-xl transition-all duration-300 cursor-pointer ${extraClasses}">
                             ${mediaPreview}
                             <div class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/75 backdrop-blur-md border border-emerald-500/40 font-mono text-[10px] text-emerald-400 flex items-center gap-1.5 pointer-events-none">
-                                <span class="w-1.5 h-1.5 rounded-full ${item.type === 'video' ? 'bg-rose-500 animate-ping' : 'bg-emerald-400'}"></span>
+                                <span class="w-1.5 h-1.5 rounded-full ${mediaType === 'video' ? 'bg-rose-500 animate-ping' : 'bg-emerald-400'}"></span>
                                 <span>${item.tag}</span>
                             </div>
                             <div class="absolute top-3 right-3 p-1.5 rounded-lg bg-black/60 text-emerald-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -1459,29 +1532,9 @@
                     `;
                 }
 
-                const isVideo = item.type === 'video';
                 return `
                     <div id="${cardDomId}" onclick="window.openCctvZoom(${chapterIdx}, ${itemIdx}, true)" title="Click to inspect CCTV feed or upload media" class="viewfinder group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/95 via-slate-950 to-slate-900 border border-dashed border-emerald-500/35 hover:border-purple-400 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center p-4 text-center ${extraClasses}">
-                        <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] text-emerald-400">
-                            ${item.tag}
-                        </div>
-                        <button type="button" onclick="event.stopPropagation(); window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" title="Upload Photo/Video Here" class="absolute top-2 right-2 px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-400 text-emerald-300 hover:text-slate-950 font-mono text-[10px] font-bold transition-all cursor-pointer z-20">
-                            + UPLOAD
-                        </button>
-
-                        <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 group-hover:bg-purple-500/20 border border-emerald-500/30 group-hover:border-purple-400 flex items-center justify-center text-emerald-400 group-hover:text-purple-300 mb-2 transition-transform group-hover:scale-110">
-                            <i data-lucide="${isVideo ? 'video' : 'camera'}" class="w-5 h-5"></i>
-                        </div>
-                        <span class="font-mono text-[11px] font-bold text-slate-200 group-hover:text-purple-300">
-                            ${isVideo ? 'VIDEO FEED STANDBY' : 'PHOTO FEED STANDBY'}
-                        </span>
-                        <span class="font-mono text-[10px] text-slate-500 mt-0.5 max-w-[200px] truncate">
-                            ${item.label}
-                        </span>
-
-                        <div class="absolute bottom-2 inset-x-2.5 px-2.5 py-1 rounded-xl bg-black/70 border border-slate-800/80">
-                            <p class="font-sans text-[11px] text-slate-300 truncate">"${item.caption}"</p>
-                        </div>
+                        ${renderStandbyPlaceholderInner(chapterIdx, itemIdx)}
                     </div>
                 `;
             }
@@ -1646,6 +1699,33 @@
             // ===================================================================
             // CCTV SPY CLOSE-UP ZOOM ENGINE (FLIP ORIGIN-TO-FULLSCREEN)
             // ===================================================================
+            function renderZoomFallback(chapterIdx, itemIdx) {
+                const item = config.chapters[chapterIdx].items[itemIdx];
+                const mediaContainer = document.getElementById('cctv-zoom-media');
+                if (!mediaContainer) return;
+                spyAudio.setDucked(false);
+                mediaContainer.innerHTML = `
+                    <div class="w-full h-full bg-spy-bg bg-spy-grid flex flex-col items-center justify-center p-6 text-center relative">
+                        <div class="w-24 h-24 rounded-full border-2 border-dashed border-emerald-500/50 flex items-center justify-center mb-5 animate-[spin_12s_linear_infinite]">
+                            <div class="w-16 h-16 rounded-full border border-purple-400/60"></div>
+                        </div>
+                        <i data-lucide="${item.type === 'video' ? 'video' : 'camera'}" class="w-10 h-10 text-emerald-400 -mt-16 mb-7"></i>
+                        <div class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 font-mono text-xs text-emerald-300 mb-2">
+                            SURVEILLANCE SLOT READY // ${item.aspect}
+                        </div>
+                        <h3 class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">${item.label}</h3>
+                        <p class="font-mono text-xs text-slate-400 max-w-md mb-5">
+                            Add your file to <code class="text-emerald-300">./media/</code> in GitHub or test-upload right now!
+                        </p>
+                        <button type="button" onclick="window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" class="px-5 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm flex items-center gap-2 shadow-lg cursor-pointer">
+                            <i data-lucide="upload" class="w-4 h-4"></i>
+                            <span>UPLOAD PHOTO / VIDEO NOW</span>
+                        </button>
+                    </div>
+                `;
+                if (window.lucide) window.lucide.createIcons();
+            }
+
             function openCctvZoom(chapterIdx, itemIdx, isManualClick = false) {
                 clearTimeout(startTransitionTimeout);
                 clearInterval(itemHoldInterval);
@@ -1678,12 +1758,13 @@
 
                 const mediaContainer = document.getElementById('cctv-zoom-media');
                 const hasMedia = item.src && item.src.trim() !== '';
+                const mediaType = resolveMediaType(item.src, item.type);
 
                 if (hasMedia) {
-                    if (item.type === 'video') {
+                    if (mediaType === 'video') {
                         spyAudio.setDucked(true);
                         mediaContainer.innerHTML = `
-                            <video id="active-zoom-video" src="${item.src}" class="w-full h-full object-contain bg-black" autoplay playsinline controls></video>
+                            <video id="active-zoom-video" src="${item.src}" class="w-full h-full object-contain bg-black" autoplay playsinline controls onerror="window.renderZoomFallback(${chapterIdx}, ${itemIdx})"></video>
                         `;
                         const vidEl = document.getElementById('active-zoom-video');
                         if (vidEl) {
@@ -1702,30 +1783,11 @@
                     } else {
                         spyAudio.setDucked(false);
                         mediaContainer.innerHTML = `
-                            <img src="${item.src}" alt="${item.label}" class="w-full h-full object-contain animate-ken-burns select-none">
+                            <img src="${item.src}" alt="${item.label}" class="w-full h-full object-contain animate-ken-burns select-none" onerror="window.renderZoomFallback(${chapterIdx}, ${itemIdx})">
                         `;
                     }
                 } else {
-                    spyAudio.setDucked(false);
-                    mediaContainer.innerHTML = `
-                        <div class="w-full h-full bg-spy-bg bg-spy-grid flex flex-col items-center justify-center p-6 text-center relative">
-                            <div class="w-24 h-24 rounded-full border-2 border-dashed border-emerald-500/50 flex items-center justify-center mb-5 animate-[spin_12s_linear_infinite]">
-                                <div class="w-16 h-16 rounded-full border border-purple-400/60"></div>
-                            </div>
-                            <i data-lucide="${item.type === 'video' ? 'video' : 'camera'}" class="w-10 h-10 text-emerald-400 -mt-16 mb-7"></i>
-                            <div class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 font-mono text-xs text-emerald-300 mb-2">
-                                SURVEILLANCE SLOT READY // ${item.aspect}
-                            </div>
-                            <h3 class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">${item.label}</h3>
-                            <p class="font-mono text-xs text-slate-400 max-w-md mb-5">
-                                Drop your photo or video into this slot via the button below or the INTEL drawer!
-                            </p>
-                            <button type="button" onclick="window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" class="px-5 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm flex items-center gap-2 shadow-lg cursor-pointer">
-                                <i data-lucide="upload" class="w-4 h-4"></i>
-                                <span>UPLOAD PHOTO / VIDEO NOW</span>
-                            </button>
-                        </div>
-                    `;
+                    renderZoomFallback(chapterIdx, itemIdx);
                 }
 
                 if (window.lucide) window.lucide.createIcons();
@@ -1826,7 +1888,7 @@
             function startItemHoldTimer() {
                 clearInterval(itemHoldInterval);
                 itemElapsedMs = 0;
-                currentHoldTargetMs = config.itemDurationMs;
+                currentHoldTargetMs = config.itemDurationMs || 4000;
 
                 const progressBar = document.getElementById('zoom-item-progress');
                 if (progressBar) progressBar.style.width = '0%';
@@ -2036,13 +2098,17 @@
                 container.innerHTML = config.chapters.map((ch, cIdx) => {
                     const slotsHTML = ch.items.map((item, iIdx) => {
                         const hasFile = item.src && item.src.trim() !== '';
+                        const isRepoPath = hasFile && !item.src.startsWith('blob:');
+                        const badgeText = hasFile
+                            ? (isRepoPath ? `REPO ./media/ ✓` : (item.type === 'video' ? 'LOCAL VIDEO ✓' : 'LOCAL PHOTO ✓'))
+                            : 'EMPTY';
                         return `
                             <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5 space-y-2.5">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="font-mono text-xs font-bold text-slate-200">${item.label}</span>
                                     <div class="flex items-center gap-1.5">
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono ${hasFile ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400'}">
-                                            ${hasFile ? (item.type === 'video' ? 'VIDEO ✓' : 'PHOTO ✓') : 'EMPTY'}
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono ${hasFile ? (isRepoPath ? 'bg-cyan-500/20 text-cyan-300' : 'bg-emerald-500/20 text-emerald-400') : 'bg-slate-800 text-slate-400'}">
+                                            ${badgeText}
                                         </span>
                                         ${ch.items.length > 1 ? `
                                             <button type="button" onclick="window.removeMediaSlot(${cIdx}, ${iIdx})" title="Delete Slot" class="p-1 rounded bg-slate-800 hover:bg-rose-500/30 text-slate-400 hover:text-rose-400 cursor-pointer">
@@ -2055,7 +2121,7 @@
                                 <div class="flex flex-col sm:flex-row gap-2">
                                     <label class="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 font-mono text-xs cursor-pointer transition-all">
                                         <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                                        <span>Upload Photo / Video</span>
+                                        <span>${isRepoPath ? 'Override Locally' : 'Upload Photo / Video'}</span>
                                         <input type="file" accept="image/*,video/*" class="hidden" onchange="window.handleSingleUpload(event, ${cIdx}, ${iIdx})">
                                     </label>
                                     ${hasFile ? `
@@ -2239,26 +2305,33 @@
 
             function updateMediaMeta(chapterIdx, itemIdx, field, value) {
                 config.chapters[chapterIdx].items[itemIdx][field] = value;
-                hasUnsavedOrVaultData = true;
+                hasLocalBrowserEdits = true;
                 scheduleVaultStateSave();
             }
 
             function updateConfigText(field, value) {
                 config[field] = value;
-                hasUnsavedOrVaultData = true;
+                hasLocalBrowserEdits = true;
                 syncIdentityLabels();
                 scheduleVaultStateSave();
             }
 
             function copyGithubConfig() {
                 const githubConfig = JSON.parse(JSON.stringify(config));
-                githubConfig.bgmSrc = githubConfig.bgmFileName ? `./media/${githubConfig.bgmFileName}` : '';
+                if (githubConfig.bgmFileName) {
+                    githubConfig.bgmSrc = `./media/${githubConfig.bgmFileName}`;
+                } else if (!githubConfig.bgmSrc || githubConfig.bgmSrc.startsWith('blob:')) {
+                    githubConfig.bgmSrc = DEFAULT_DOSSIER_CONFIG.bgmSrc;
+                }
                 delete githubConfig.bgmFileName;
 
                 githubConfig.chapters.forEach(ch => {
                     ch.items.forEach(item => {
                         if (item.fileName) {
                             item.src = `./media/${item.fileName}`;
+                            item.type = resolveMediaType(item.src, item.type);
+                        } else if (item.src && !item.src.startsWith('blob:')) {
+                            item.type = resolveMediaType(item.src, item.type);
                         } else if (item.src && item.src.startsWith('blob:')) {
                             item.src = `./media/${item.id}.${item.type === 'video' ? 'mp4' : 'jpg'}`;
                         }
@@ -2273,7 +2346,7 @@
                 temp.select();
                 document.execCommand('copy');
                 document.body.removeChild(temp);
-                showToast('Copied DEFAULT_DOSSIER_CONFIG with ./media/ paths for GitHub!');
+                showToast('Copied DEFAULT_DOSSIER_CONFIG! Paste it at the top of <script> in index.html');
             }
 
             function handleResetVaultClick() {
@@ -2281,15 +2354,15 @@
                 if (!resetConfirmPending) {
                     resetConfirmPending = true;
                     if (btn) {
-                        btn.textContent = 'Click Again to Confirm Wipe';
+                        btn.textContent = 'Click Again to Confirm Reset';
                         btn.classList.add('bg-rose-600', 'text-white', 'font-bold');
                     }
-                    showToast('Click "Confirm Wipe" within 4s to erase all saved Vault media');
+                    showToast('Click again within 4s to clear local overrides & restore repo config');
                     clearTimeout(resetConfirmTimer);
                     resetConfirmTimer = setTimeout(() => {
                         resetConfirmPending = false;
                         if (btn) {
-                            btn.textContent = 'Clear Vault / Reset';
+                            btn.textContent = 'Reset to Repo Config';
                             btn.classList.remove('bg-rose-600', 'text-white', 'font-bold');
                         }
                     }, 4000);
@@ -2299,7 +2372,7 @@
                 clearTimeout(resetConfirmTimer);
                 resetConfirmPending = false;
                 if (btn) {
-                    btn.textContent = 'Clear Vault / Reset';
+                    btn.textContent = 'Reset to Repo Config';
                     btn.classList.remove('bg-rose-600', 'text-white', 'font-bold');
                 }
                 resetToPlaceholders();
@@ -2308,12 +2381,15 @@
             async function resetToPlaceholders() {
                 await vaultDB.clearAll();
                 spyAudio.clearCustomTrack();
-                config = JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG));
-                hasUnsavedOrVaultData = false;
+                config = normalizeConfigMediaTypes(JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG)));
+                if (config.bgmSrc && config.bgmSrc.trim() !== '') {
+                    spyAudio.loadCustomTrack(config.bgmSrc, config.bgmTitle || 'CLASSIFIED BGM');
+                }
+                hasLocalBrowserEdits = false;
                 syncIdentityLabels();
                 buildEditorDrawer();
                 await refreshVaultStatusBadges();
-                showToast('IndexedDB Vault wiped & all 40 slots reset to default');
+                showToast('Cleared local browser overrides — restored DEFAULT_DOSSIER_CONFIG');
             }
 
             // ===================================================================
@@ -2321,7 +2397,7 @@
             // ===================================================================
             function setupBeforeUnloadGuard() {
                 window.addEventListener('beforeunload', (e) => {
-                    if (isDrawerOpen || hasUnsavedOrVaultData) {
+                    if (isDrawerOpen || hasLocalBrowserEdits) {
                         e.preventDefault();
                         e.returnValue = '';
                         return '';
@@ -2410,25 +2486,42 @@
             window.handleResetVaultClick = handleResetVaultClick;
             window.resetToPlaceholders = resetToPlaceholders;
             window.toggleFullscreen = toggleFullscreen;
+            window.handleMediaLoadError = handleMediaLoadError;
+            window.renderZoomFallback = renderZoomFallback;
 
-            // Hydrate IndexedDB Vault and Initialize on DOM Ready
+            // Hydrate Repo Config + Optional IndexedDB Local Overrides on DOM Ready
             async function initApp() {
                 if (window.lucide) window.lucide.createIcons();
 
                 try {
                     const { stateRecord, blobRecords } = await vaultDB.loadAll();
                     if (stateRecord && stateRecord.config) {
-                        config = stateRecord.config;
+                        // Merge saved metadata while keeping hardcoded repo src paths unless overridden
+                        const repoBase = normalizeConfigMediaTypes(JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG)));
+                        const savedCfg = stateRecord.config;
+                        config = savedCfg;
+                        config.chapters.forEach((ch, cIdx) => {
+                            ch.items.forEach((item, iIdx) => {
+                                const repoItem = repoBase.chapters[cIdx] && repoBase.chapters[cIdx].items[iIdx];
+                                if ((!item.src || item.src.trim() === '') && repoItem && repoItem.src) {
+                                    item.src = repoItem.src;
+                                }
+                                item.type = resolveMediaType(item.src, item.type);
+                            });
+                        });
+                        if ((!config.bgmSrc || config.bgmSrc.trim() === '') && repoBase.bgmSrc) {
+                            config.bgmSrc = repoBase.bgmSrc;
+                        }
                     }
 
                     const blobMap = new Map();
                     blobRecords.forEach(rec => blobMap.set(rec.key, rec));
 
-                    if (blobMap.size > 0 || (stateRecord && stateRecord.config)) {
-                        hasUnsavedOrVaultData = true;
+                    if (blobMap.size > 0) {
+                        hasLocalBrowserEdits = true;
                     }
 
-                    // Rehydrate all 40 media slots from IndexedDB blobs
+                    // Apply optional IndexedDB local overrides on top of repo config
                     config.chapters.forEach(ch => {
                         ch.items.forEach(item => {
                             const rec = blobMap.get(item.id);
@@ -2440,7 +2533,7 @@
                         });
                     });
 
-                    // Rehydrate audio settings & custom BGM track
+                    // Rehydrate audio settings & custom/repo BGM track
                     if (stateRecord && stateRecord.audio) {
                         if (typeof stateRecord.audio.baseVolume === 'number') {
                             spyAudio.baseVolume = stateRecord.audio.baseVolume;
@@ -2471,7 +2564,7 @@
                         if (badge) badge.textContent = `CUSTOM: ${customBgmRec.fileName}`;
                         if (resetBtn) resetBtn.classList.remove('hidden');
                     } else if (config.bgmSrc && config.bgmSrc.trim() !== '') {
-                        spyAudio.loadCustomTrack(config.bgmSrc, config.bgmTitle || 'CUSTOM BGM');
+                        spyAudio.loadCustomTrack(config.bgmSrc, config.bgmTitle || 'CLASSIFIED BGM');
                     }
                 } catch (e) {}
 
