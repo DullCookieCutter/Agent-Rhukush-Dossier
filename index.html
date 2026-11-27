@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOP SECRET // AGENT MODERATOR DOSSIER</title>
+    <title>TOP SECRET // AGENT RHUKUSH — SIR JOHN ROI JULAGTING</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Space Grotesk (Display), Inter (Body), JetBrains Mono (Spy Terminal) -->
@@ -120,6 +120,16 @@
             }
         }
 
+        /* PIN Denied Shake Animation */
+        @keyframes pinShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-pin-shake {
+            animation: pinShake 0.35s ease-in-out;
+        }
+
         /* CCTV Target Reticle Lock-On */
         .cctv-locked {
             border-color: #00ff88 !important;
@@ -197,7 +207,7 @@
                 <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
                 <span>INTERCEPTED TRANSMISSION // BSIT-HQ</span>
             </div>
-            <span id="boot-clock">CLEARANCE: LEVEL 99</span>
+            <span id="boot-clock">CODENAME: AGENT RHUKUSH</span>
         </div>
 
         <!-- Main Dossier Lock Card -->
@@ -208,20 +218,20 @@
 
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs mb-4">
                 <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                <span>ENCRYPTED SURPRISE PROTOCOL</span>
+                <span>ENCRYPTED SURPRISE PROTOCOL // AGENT RHUKUSH</span>
             </div>
 
             <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-2">
-                FILE: <span id="boot-agent-name" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-purple-400 to-rose-400">AGENT MODERATOR</span>
+                FILE: <span id="boot-agent-name" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-purple-400 to-rose-400">SIR JOHN ROI JULAGTING</span>
             </h1>
             <p class="font-mono text-xs sm:text-sm text-slate-400 mb-6">
-                SUBJECT: BSIT Club Advisor // Status: <span class="text-purple-400">Iconic, Gen-Z Coded & Unmatched</span>
+                CODENAME: <span id="boot-codename" class="text-emerald-400 font-bold">AGENT RHUKUSH</span> // Status: <span class="text-purple-400">Iconic, Gen-Z Coded & Unmatched</span>
             </p>
 
             <!-- Terminal Decrypt Log -->
             <div id="terminal-log" class="bg-black/60 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-emerald-400/90 space-y-1.5 mb-4 h-32 overflow-y-auto">
                 <div>> Establishing secure connection to BSIT Lecture Room... [OK]</div>
-                <div>> Bypassing firewall: "Just_A_Normal_Lecture.pptx"... [SUCCESS]</div>
+                <div>> Target Confirmed: SIR JOHN ROI JULAGTING (AGENT RHUKUSH)... [LOCKED]</div>
                 <div>> Loading 10 Classified Chapters (40 Surveillance Feeds)... [READY]</div>
                 <div class="text-purple-400 animate-pulse">> Awaiting manual decryption trigger...</div>
             </div>
@@ -242,8 +252,8 @@
                     <span>DECRYPT & LAUNCH SURPRISE</span>
                 </button>
 
-                <button id="btn-boot-edit" type="button" onclick="window.toggleEditorDrawer(true)" title="Customize Photos, Videos & Captions" class="w-full sm:w-auto px-5 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-emerald-400 font-mono text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
-                    <i data-lucide="sliders" class="w-4 h-4"></i>
+                <button id="btn-boot-edit" type="button" onclick="window.toggleEditorDrawer(true)" title="PIN-Protected Intel Customizer" class="w-full sm:w-auto px-5 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-emerald-400 font-mono text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
+                    <i data-lucide="lock" class="w-4 h-4 text-amber-400"></i>
                     <span>EDIT INTEL</span>
                 </button>
             </div>
@@ -267,7 +277,7 @@
                     <span>REC</span>
                 </div>
                 <div class="hidden xl:flex flex-col">
-                    <span class="font-mono text-[11px] text-emerald-400 font-bold leading-none" id="hud-agent-name">AGENT MODERATOR</span>
+                    <span class="font-mono text-[11px] text-emerald-400 font-bold leading-none" id="hud-agent-name">SIR JOHN ROI JULAGTING</span>
                     <span class="font-mono text-[10px] text-slate-400 leading-tight" id="hud-runtime-display">RUNTIME: 00:00 / 02:40</span>
                 </div>
             </div>
@@ -277,7 +287,7 @@
                 <!-- Populated dynamically via JS -->
             </div>
 
-            <!-- Right HUD Controls (Pace, Audio, Fullscreen, Secret Editor Gear) -->
+            <!-- Right HUD Controls (Pace, Audio, Fullscreen, PIN-Protected Intel) -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <select id="pace-selector" onchange="window.changePace(this.value)" title="Presentation Pace / Duration" class="hidden md:block px-2.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 font-mono text-[11px] text-purple-300 focus:outline-none focus:border-emerald-500 cursor-pointer">
                     <option value="4000" selected>PACE: SNAPPY (4.0s)</option>
@@ -307,9 +317,9 @@
                 <button type="button" onclick="window.toggleFullscreen()" title="Fullscreen (F)" class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition-all cursor-pointer">
                     <i data-lucide="maximize" class="w-4 h-4"></i>
                 </button>
-                <!-- Discrete Intel Editor Trigger -->
-                <button type="button" onclick="window.toggleEditorDrawer(true)" title="Open Agent Intel Media Editor & Batch Upload" class="px-2.5 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-purple-400 font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer">
-                    <i data-lucide="folder-plus" class="w-4 h-4 text-emerald-400"></i>
+                <!-- PIN-Protected Intel Editor Trigger -->
+                <button type="button" onclick="window.toggleEditorDrawer(true)" title="PIN-Protected Agent Intel Customizer" class="px-2.5 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-amber-400 font-mono text-xs flex items-center gap-1.5 transition-all cursor-pointer">
+                    <i data-lucide="lock" class="w-4 h-4 text-amber-400"></i>
                     <span class="hidden lg:inline">INTEL</span>
                 </button>
             </div>
@@ -447,7 +457,67 @@
     </div>
 
     <!-- =====================================================================
-         4. LIVE MEDIA CUSTOMIZATION DRAWER ('AGENT INTEL EDITOR')
+         4. RESTRICTED 6-DIGIT PIN GATE MODAL (FOR INTEL CUSTOMIZER)
+    ====================================================================== -->
+    <div id="pin-gate-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+        <div onclick="window.closePinGate()" class="absolute inset-0 bg-black/85 backdrop-blur-md"></div>
+
+        <div id="pin-gate-card" class="relative z-10 w-full max-w-sm bg-spy-card border border-amber-400/40 rounded-3xl p-6 shadow-[0_0_60px_rgba(245,158,11,0.18)] space-y-5">
+            <div class="flex items-center justify-between">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 font-mono text-[11px] font-bold">
+                    <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+                    <span>RESTRICTED ACCESS</span>
+                </div>
+                <button type="button" onclick="window.closePinGate()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="text-center space-y-1">
+                <h3 class="font-display text-xl font-extrabold text-white">ENTER 6-DIGIT INTEL PIN</h3>
+                <p class="font-mono text-[11px] text-slate-400">Clearance required to modify Agent Rhukush dossier</p>
+            </div>
+
+            <!-- 6-Digit Visual Slots + Keyboard Input -->
+            <div class="space-y-2">
+                <div id="pin-digit-boxes" onclick="document.getElementById('pin-hidden-input').focus()" class="grid grid-cols-6 gap-2 cursor-text">
+                    <div class="pin-slot h-12 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center font-mono text-xl font-bold text-emerald-400"></div>
+                    <div class="pin-slot h-12 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center font-mono text-xl font-bold text-emerald-400"></div>
+                    <div class="pin-slot h-12 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center font-mono text-xl font-bold text-emerald-400"></div>
+                    <div class="pin-slot h-12 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center font-mono text-xl font-bold text-emerald-400"></div>
+                    <div class="pin-slot h-12 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center font-mono text-xl font-bold text-emerald-400"></div>
+                    <div class="pin-slot h-12 rounded-xl bg-slate-950 border border-slate-700 flex items-center justify-center font-mono text-xl font-bold text-emerald-400"></div>
+                </div>
+                <input id="pin-hidden-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" oninput="window.handlePinFieldInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();window.submitPinGate();}" class="sr-only" aria-label="6-Digit Security PIN">
+                <p id="pin-error-msg" class="h-4 text-center font-mono text-[11px] text-rose-400 font-bold"></p>
+            </div>
+
+            <!-- On-Screen Spy Keypad -->
+            <div class="grid grid-cols-3 gap-2 font-mono text-base font-bold">
+                <button type="button" onclick="window.appendPinDigit('1')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">1</button>
+                <button type="button" onclick="window.appendPinDigit('2')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">2</button>
+                <button type="button" onclick="window.appendPinDigit('3')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">3</button>
+                <button type="button" onclick="window.appendPinDigit('4')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">4</button>
+                <button type="button" onclick="window.appendPinDigit('5')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">5</button>
+                <button type="button" onclick="window.appendPinDigit('6')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">6</button>
+                <button type="button" onclick="window.appendPinDigit('7')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">7</button>
+                <button type="button" onclick="window.appendPinDigit('8')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">8</button>
+                <button type="button" onclick="window.appendPinDigit('9')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">9</button>
+                <button type="button" onclick="window.clearPinInput()" class="py-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs active:scale-95 transition-all cursor-pointer">CLR</button>
+                <button type="button" onclick="window.appendPinDigit('0')" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white active:scale-95 transition-all cursor-pointer">0</button>
+                <button type="button" onclick="window.backspacePinDigit()" class="py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-300 flex items-center justify-center active:scale-95 transition-all cursor-pointer" title="Backspace">
+                    <i data-lucide="delete" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <button type="button" onclick="window.submitPinGate()" class="w-full py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-extrabold text-sm tracking-wide transition-all cursor-pointer">
+                VERIFY & UNLOCK INTEL
+            </button>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         5. LIVE MEDIA CUSTOMIZATION DRAWER ('AGENT INTEL EDITOR')
     ====================================================================== -->
     <div id="editor-drawer" class="fixed inset-0 z-50 hidden">
         <!-- Backdrop -->
@@ -459,12 +529,12 @@
             <div class="p-5 sm:p-6 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
                 <div>
                     <div class="flex items-center gap-2 text-emerald-400 font-mono text-xs mb-1">
-                        <i data-lucide="folder-edit" class="w-4 h-4"></i>
-                        <span>AGENT INTEL CUSTOMIZER</span>
+                        <i data-lucide="unlock" class="w-4 h-4"></i>
+                        <span>AGENT INTEL CUSTOMIZER // UNLOCKED</span>
                     </div>
                     <h2 class="font-display text-xl font-bold text-white">Customize Photos, Videos & Soundtrack</h2>
                 </div>
-                <button type="button" onclick="window.toggleEditorDrawer(false)" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer">
+                <button type="button" onclick="window.toggleEditorDrawer(false)" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer" title="Close & Re-Lock Intel">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -504,11 +574,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-mono text-slate-400 mb-1">Agent / Moderator Name</label>
-                            <input id="input-agent-name" type="text" oninput="window.updateConfigText('agentName', this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-emerald-500 focus:outline-none">
+                            <input id="input-agent-name" type="text" value="SIR JOHN ROI JULAGTING" oninput="window.updateConfigText('agentName', this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-emerald-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-mono text-slate-400 mb-1">Codename / Alias</label>
-                            <input id="input-codename" type="text" oninput="window.updateConfigText('codename', this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-emerald-500 focus:outline-none">
+                            <input id="input-codename" type="text" value="AGENT RHUKUSH" oninput="window.updateConfigText('codename', this.value)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:border-emerald-500 focus:outline-none">
                         </div>
                     </div>
                     <div>
@@ -588,19 +658,19 @@
 
             <!-- Drawer Footer -->
             <div class="p-4 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-3">
-                <span class="font-mono text-[11px] text-emerald-400/90 flex items-center gap-1.5">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-                    <span>Auto-saved to IndexedDB Vault</span>
+                <span class="font-mono text-[11px] text-amber-400/90 flex items-center gap-1.5">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                    <span>Auto-locks when closed</span>
                 </span>
                 <button type="button" onclick="window.toggleEditorDrawer(false)" class="px-6 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm cursor-pointer">
-                    DONE & RETURN TO STAGE
+                    DONE & LOCK INTEL
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Custom Non-Blocking Toast Notification -->
-    <div id="toast-box" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-300">
+    <div id="toast-box" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-[70] pointer-events-none opacity-0 translate-y-2 transition-all duration-300">
         <div class="px-4 py-2.5 rounded-2xl bg-slate-900/95 border border-emerald-500/50 text-emerald-300 font-mono text-xs shadow-2xl flex items-center gap-2">
             <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
             <span id="toast-msg">Updated!</span>
@@ -608,22 +678,18 @@
     </div>
 
     <!-- =====================================================================
-         5. COMPLETE APPLICATION JAVASCRIPT
-         >>> EDIT DEFAULT_DOSSIER_CONFIG RIGHT BELOW FOR CROSS-DEVICE HOSTING <<<
+         6. COMPLETE APPLICATION JAVASCRIPT
+         >>> HARDCODED IDENTITY, 6-DIGIT PIN & MEDIA PATHS <<<
     ====================================================================== -->
     <script>
-        /* =========================================================================
-         *  HOW TO MAKE ALL PHOTOS, VIDEOS & MUSIC WORK ON EVERY DEVICE (GITHUB):
-         *  1. Create a folder named `media` next to this `index.html` file.
-         *  2. Put your photos, videos, and optional `bgm.mp3` inside `media/`.
-         *  3. Relative `./media/...` paths work on VS Code Live Server AND GitHub!
-         * ========================================================================= */
+        const INTEL_ACCESS_PIN = "112502";
+
         const DEFAULT_DOSSIER_CONFIG = {
             agentName: "SIR JOHN ROI JULAGTING",
             codename: "AGENT RHUKUSH",
-            bgmSrc: "./media/bgm.mp3", // Place bgm.mp3 in ./media/ (auto-falls back to Spy Synth if missing)
+            bgmSrc: "./media/bgm.mp3",
             bgmTitle: "CLASSIFIED BGM",
-            itemDurationMs: 4000, // 4.0 seconds per image (videos auto-play their full length up to 35s)
+            itemDurationMs: 4000,
             finaleMessage: "Thank you for being more than just our BSIT club moderator—thank you for hyping us up, keeping the vibes immaculate, mentoring us through every bug and deadline, and always showing up with unmatched style and warmth. We appreciate you so much!",
             chapters: [
                 {
@@ -782,7 +848,6 @@
         (function() {
             "use strict";
 
-            // Auto-detect media type ('video' vs 'image') from file extension or MIME type
             function resolveMediaType(src, explicitType = 'image') {
                 if (!src) return explicitType || 'image';
                 const cleanPath = src.split('?')[0].split('#')[0].toLowerCase();
@@ -801,7 +866,7 @@
                 return cfgObj;
             }
 
-            // Application State (Initialized directly from hardcoded DEFAULT_DOSSIER_CONFIG)
+            // Application State
             let config = normalizeConfigMediaTypes(JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG)));
             let currentChapterIdx = 0;
             let currentItemIdxInChapter = 0;
@@ -812,9 +877,119 @@
             let itemElapsedMs = 0;
             let currentHoldTargetMs = config.itemDurationMs;
             let isDrawerOpen = false;
+            let isIntelUnlocked = false;
+            let isPinModalOpen = false;
+            let currentPinBuffer = "";
+            let pendingPinSuccessAction = null;
             let hasLocalBrowserEdits = false;
             let resetConfirmPending = false;
             let resetConfirmTimer = null;
+
+            // ===================================================================
+            // 6-DIGIT PIN GATE CONTROLLER (PIN: 112502)
+            // ===================================================================
+            function renderPinSlots() {
+                const slots = document.querySelectorAll('#pin-digit-boxes .pin-slot');
+                slots.forEach((slot, idx) => {
+                    const filled = idx < currentPinBuffer.length;
+                    slot.textContent = filled ? '•' : '';
+                    slot.classList.toggle('border-emerald-400', filled);
+                    slot.classList.toggle('border-slate-700', !filled);
+                });
+                const hiddenInput = document.getElementById('pin-hidden-input');
+                if (hiddenInput && hiddenInput.value !== currentPinBuffer) {
+                    hiddenInput.value = currentPinBuffer;
+                }
+            }
+
+            function openPinGate(onSuccess) {
+                pendingPinSuccessAction = onSuccess || null;
+                currentPinBuffer = "";
+                isPinModalOpen = true;
+
+                const modal = document.getElementById('pin-gate-modal');
+                const errEl = document.getElementById('pin-error-msg');
+                if (errEl) errEl.textContent = "";
+
+                renderPinSlots();
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                }
+                if (window.lucide) window.lucide.createIcons();
+
+                setTimeout(() => {
+                    const hiddenInput = document.getElementById('pin-hidden-input');
+                    if (hiddenInput) hiddenInput.focus();
+                }, 50);
+            }
+
+            function closePinGate() {
+                isPinModalOpen = false;
+                currentPinBuffer = "";
+                pendingPinSuccessAction = null;
+                const modal = document.getElementById('pin-gate-modal');
+                if (modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+                renderPinSlots();
+            }
+
+            function handlePinFieldInput(rawVal) {
+                const digitsOnly = String(rawVal || '').replace(/\D/g, '').slice(0, 6);
+                currentPinBuffer = digitsOnly;
+                const errEl = document.getElementById('pin-error-msg');
+                if (errEl) errEl.textContent = "";
+                renderPinSlots();
+
+                if (currentPinBuffer.length === 6) {
+                    submitPinGate();
+                }
+            }
+
+            function appendPinDigit(digit) {
+                if (currentPinBuffer.length >= 6) return;
+                spyAudio.playBlip(760, 0.04, 'sine', 0.04);
+                handlePinFieldInput(currentPinBuffer + String(digit));
+            }
+
+            function backspacePinDigit() {
+                if (!currentPinBuffer.length) return;
+                spyAudio.playBlip(440, 0.04, 'sine', 0.04);
+                handlePinFieldInput(currentPinBuffer.slice(0, -1));
+            }
+
+            function clearPinInput() {
+                spyAudio.playBlip(360, 0.05, 'sine', 0.04);
+                handlePinFieldInput("");
+            }
+
+            function submitPinGate() {
+                const errEl = document.getElementById('pin-error-msg');
+                const card = document.getElementById('pin-gate-card');
+
+                if (currentPinBuffer === INTEL_ACCESS_PIN) {
+                    spyAudio.playBlip(980, 0.1, 'sine', 0.08);
+                    const action = pendingPinSuccessAction;
+                    isIntelUnlocked = true;
+                    closePinGate();
+                    showToast('CLEARANCE GRANTED // INTEL UNLOCKED');
+                    if (typeof action === 'function') action();
+                } else {
+                    spyAudio.playBlip(180, 0.18, 'sawtooth', 0.08);
+                    if (errEl) errEl.textContent = "ACCESS DENIED // INVALID 6-DIGIT PIN";
+                    if (card) {
+                        card.classList.remove('animate-pin-shake');
+                        void card.offsetWidth;
+                        card.classList.add('animate-pin-shake');
+                    }
+                    currentPinBuffer = "";
+                    renderPinSlots();
+                    const hiddenInput = document.getElementById('pin-hidden-input');
+                    if (hiddenInput) hiddenInput.focus();
+                }
+            }
 
             // ===================================================================
             // INDEXEDDB OPTIONAL LOCAL OVERRIDE VAULT ('BSIT_Classified_Vault_v1')
@@ -1081,7 +1256,6 @@
                     this.hasCustomBgm = false;
                     this.trackName = 'SPY SYNTH';
 
-                    // Automatic graceful fallback to procedural Spy Synth if ./media/bgm.mp3 is absent
                     this.bgmAudio.addEventListener('error', () => {
                         if (this.hasCustomBgm) {
                             this.hasCustomBgm = false;
@@ -1402,12 +1576,14 @@
             // ===================================================================
             function syncIdentityLabels() {
                 const bootName = document.getElementById('boot-agent-name');
+                const bootCode = document.getElementById('boot-codename');
                 const hudName = document.getElementById('hud-agent-name');
                 const inName = document.getElementById('input-agent-name');
                 const inCode = document.getElementById('input-codename');
                 const inFinale = document.getElementById('input-finale-msg');
 
                 if (bootName) bootName.textContent = config.agentName;
+                if (bootCode) bootCode.textContent = config.codename;
                 if (hudName) hudName.textContent = config.agentName;
                 if (inName) inName.value = config.agentName;
                 if (inCode) inCode.value = config.codename;
@@ -1475,7 +1651,7 @@
                     <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 font-mono text-[10px] text-emerald-400">
                         ${item.tag}
                     </div>
-                    <button type="button" onclick="event.stopPropagation(); window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" title="Upload Photo/Video Here" class="absolute top-2 right-2 px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-400 text-emerald-300 hover:text-slate-950 font-mono text-[10px] font-bold transition-all cursor-pointer z-20">
+                    <button type="button" onclick="event.stopPropagation(); window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" title="PIN-Protected Upload" class="absolute top-2 right-2 px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-400 text-emerald-300 hover:text-slate-950 font-mono text-[10px] font-bold transition-all cursor-pointer z-20">
                         + UPLOAD
                     </button>
 
@@ -1715,11 +1891,11 @@
                         </div>
                         <h3 class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">${item.label}</h3>
                         <p class="font-mono text-xs text-slate-400 max-w-md mb-5">
-                            Add your file to <code class="text-emerald-300">./media/</code> in GitHub or test-upload right now!
+                            Add your file to <code class="text-emerald-300">./media/</code> in GitHub or unlock with PIN to upload!
                         </p>
                         <button type="button" onclick="window.triggerQuickUpload(${chapterIdx}, ${itemIdx})" class="px-5 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-display font-bold text-sm flex items-center gap-2 shadow-lg cursor-pointer">
-                            <i data-lucide="upload" class="w-4 h-4"></i>
-                            <span>UPLOAD PHOTO / VIDEO NOW</span>
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                            <span>UPLOAD PHOTO / VIDEO (PIN)</span>
                         </button>
                     </div>
                 `;
@@ -2060,21 +2236,26 @@
             }
 
             // ===================================================================
-            // LIVE MEDIA CUSTOMIZER DRAWER & BATCH UPLOAD
+            // PIN-PROTECTED LIVE MEDIA CUSTOMIZER DRAWER & BATCH UPLOAD
             // ===================================================================
             function toggleEditorDrawer(open) {
                 const drawer = document.getElementById('editor-drawer');
                 if (!drawer) return;
 
-                isDrawerOpen = !!open;
-
                 if (open) {
+                    if (!isIntelUnlocked) {
+                        openPinGate(() => toggleEditorDrawer(true));
+                        return;
+                    }
+                    isDrawerOpen = true;
                     if (isPlaying) togglePlayPause();
                     if (isZoomOpen) closeCctvZoom(false);
                     buildEditorDrawer();
                     refreshVaultStatusBadges();
                     drawer.classList.remove('hidden');
                 } else {
+                    isDrawerOpen = false;
+                    isIntelUnlocked = false; // Re-lock automatically on close
                     drawer.classList.add('hidden');
                     const appEl = document.getElementById('presentation-app');
                     if (appEl && !appEl.classList.contains('hidden')) {
@@ -2156,6 +2337,13 @@
             }
 
             function triggerQuickUpload(chapterIdx, itemIdx) {
+                if (!isIntelUnlocked) {
+                    openPinGate(() => {
+                        triggerQuickUpload(chapterIdx, itemIdx);
+                        isIntelUnlocked = false;
+                    });
+                    return;
+                }
                 const input = document.createElement('input');
                 input.type = 'file';
                 input.accept = 'image/*,video/*';
@@ -2415,6 +2603,22 @@
 
             function setupKeyboardShortcuts() {
                 window.addEventListener('keydown', (e) => {
+                    if (isPinModalOpen) {
+                        if (e.key === 'Escape') {
+                            closePinGate();
+                        } else if (e.key >= '0' && e.key <= '9' && document.activeElement !== document.getElementById('pin-hidden-input')) {
+                            e.preventDefault();
+                            appendPinDigit(e.key);
+                        } else if (e.key === 'Backspace' && document.activeElement !== document.getElementById('pin-hidden-input')) {
+                            e.preventDefault();
+                            backspacePinDigit();
+                        } else if (e.key === 'Enter' && document.activeElement !== document.getElementById('pin-hidden-input')) {
+                            e.preventDefault();
+                            submitPinGate();
+                        }
+                        return;
+                    }
+
                     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
 
                     if (e.key === 'ArrowRight') nextMediaItem();
@@ -2462,6 +2666,13 @@
             window.spyAudio = spyAudio;
             window.startDecryption = startDecryption;
             window.toggleEditorDrawer = toggleEditorDrawer;
+            window.openPinGate = openPinGate;
+            window.closePinGate = closePinGate;
+            window.appendPinDigit = appendPinDigit;
+            window.backspacePinDigit = backspacePinDigit;
+            window.clearPinInput = clearPinInput;
+            window.handlePinFieldInput = handlePinFieldInput;
+            window.submitPinGate = submitPinGate;
             window.changePace = changePace;
             window.openCctvZoom = openCctvZoom;
             window.closeCctvZoom = closeCctvZoom;
@@ -2496,10 +2707,13 @@
                 try {
                     const { stateRecord, blobRecords } = await vaultDB.loadAll();
                     if (stateRecord && stateRecord.config) {
-                        // Merge saved metadata while keeping hardcoded repo src paths unless overridden
                         const repoBase = normalizeConfigMediaTypes(JSON.parse(JSON.stringify(DEFAULT_DOSSIER_CONFIG)));
                         const savedCfg = stateRecord.config;
                         config = savedCfg;
+                        // Always enforce hardcoded Agent Name & Codename on boot
+                        config.agentName = DEFAULT_DOSSIER_CONFIG.agentName;
+                        config.codename = DEFAULT_DOSSIER_CONFIG.codename;
+
                         config.chapters.forEach((ch, cIdx) => {
                             ch.items.forEach((item, iIdx) => {
                                 const repoItem = repoBase.chapters[cIdx] && repoBase.chapters[cIdx].items[iIdx];
@@ -2521,7 +2735,6 @@
                         hasLocalBrowserEdits = true;
                     }
 
-                    // Apply optional IndexedDB local overrides on top of repo config
                     config.chapters.forEach(ch => {
                         ch.items.forEach(item => {
                             const rec = blobMap.get(item.id);
@@ -2533,7 +2746,6 @@
                         });
                     });
 
-                    // Rehydrate audio settings & custom/repo BGM track
                     if (stateRecord && stateRecord.audio) {
                         if (typeof stateRecord.audio.baseVolume === 'number') {
                             spyAudio.baseVolume = stateRecord.audio.baseVolume;
